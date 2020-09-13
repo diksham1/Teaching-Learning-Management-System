@@ -90,7 +90,7 @@ export default function Login() {
               className={classes.submit}
               component={Link} to={ROUTES.student.dashboard}
             >
-              Log me In
+              Log Me In
             </Button>
           </form>
         </div>
