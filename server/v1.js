@@ -6,3 +6,5 @@ router.post('/login', function (req, res) {
 	console.log(req)
 	res.json({'statusCode': 200});
 })
+
+module.exports = router;
