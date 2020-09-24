@@ -1,4 +1,4 @@
-const base = 'localhost:3000'
+const base = 'https://localhost:8080'
 
 const ROUTES = {
     'student': {
@@ -6,7 +6,7 @@ const ROUTES = {
     },
     'api' :{
         'post' : {
-            'login': ''
+            'login': base + '/v1/login'
         }
     }
 }
