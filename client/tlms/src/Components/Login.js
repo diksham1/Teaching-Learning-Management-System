@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { Link , Redirect} from 'react-router-dom';
 import ROUTES from '../routes';
 import Logo from "./Logo.js"
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,8 +51,9 @@ export default function Login() {
 
   const [redirect,setRedirect] = useState(null);
 
-  function handle(){
-      //will do api call here....
+  async function handle(){
+	  const loginResponse = await axios.get(ROUTES.api.get.login);
+	  console.log(loginResponse)
       setRedirect(ROUTES.student.dashboard);
   }
 
