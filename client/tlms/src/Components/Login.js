@@ -37,7 +37,10 @@ export default function Login() {
         }}
       >
         <div class="flex flex-col w-6/12 h-5/12 bg-gray-200 justify-center items-center bg-opacity-50 hover:bg-opacity-75 rounded-lg p-4 border-4 border-red-700 shadow-2xl">
-          <Logo />
+          <div class = "w-8/12">
+            <Logo />
+          </div>
+          
           <div class="mt-4 w-full text-2xl font-medium text-red-800">Email</div>
           <div class="w-full">
             <input
