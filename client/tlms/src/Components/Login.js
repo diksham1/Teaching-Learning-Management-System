@@ -1,107 +1,85 @@
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
 import { Link , Redirect} from 'react-router-dom';
 import ROUTES from '../routes';
 import Logo from "./Logo.js"
+import Footer from "./Footer.js"
+import axios from 'axios'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: 'url(images/classroom.jpg)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 export default function Login() {
-  const classes = useStyles();
 
-  const [redirect,setRedirect] = useState(null);
+  const [redirect, setRedirect] = useState(null);
+  const [isLogging,setisLogging] = useState(false);
 
-  function handle(){
-      //will do api call here....
-      setRedirect(ROUTES.student.dashboard);
+  async function handle_login() {
+    setisLogging(true); //this varible is to be used for custom message display. May be modified to include display messages 
+    //const loginResponse = await axios.get(ROUTES.api.get.login);
+    //console.log(loginResponse);
+    //setRedirect(ROUTES.student.dashboard);
   }
 
-  if(redirect){
-    return <Redirect to = {redirect} />
+  async function handle_signup(){
+
+  }
+
+
+  if (redirect) {
+    return <Redirect to={redirect} />;
   }
 
   return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
+    <div>
+      <div
+        class="w-screen h-screen flex flex-col justify-center items-center"
+        style={{
+          backgroundImage: "url(/images/classroom.jpg)",
+          backgroundSize: "cover",
+        }}
+      >
+        <div class="flex flex-col w-6/12 h-5/12 bg-gray-200 justify-center items-center bg-opacity-50 hover:bg-opacity-75 rounded-lg p-4 border-4 border-red-700 shadow-2xl">
           <Logo />
-          <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
+          <div class="mt-4 w-full text-2xl font-medium text-red-800">Email</div>
+          <div class="w-full">
+            <input
+              type="text"
+              id="username"
+              placeholder="jane@example.com"
+              class="w-full rounded-lg p-4 focus:bg-gray-200 text-opacity-75"
+            ></input>
+          </div>
+          <div class="mt-4 w-full text-2xl font-medium text-red-800">
+            Password
+          </div>
+          <div class="w-full">
+            <input
               type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick = {handle}
+              id="username"
+              placeholder="'qwertyuiop' is a terrible password"
+              class="w-full rounded-lg p-4 focus:bg-gray-200 text-opacity-75"
+            ></input>
+          </div>
+          <div class="flex flex-col w-full px-8 sm:flex-row ">
+            <button
+              onClick={handle_login}
+              class="flex-1 px-4 py-2 m-4 w-1/2 bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
             >
-              Log Me In
-            </Button>
-          </form> 
+              Sign In
+            </button>
+            <button
+              onClick={handle_signup}
+              class="flex-1 px-4 py-2 m-4 w-1/2 bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
-      </Grid>
-    </Grid >
+        <div
+          class="flex flex-row w-6/12 p-2 m-2 text-4xl justify-center font-extrabold"
+        >
+          <div>{isLogging ? "Logging you In...." : ""}</div>
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 }

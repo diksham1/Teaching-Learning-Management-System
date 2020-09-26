@@ -3,6 +3,7 @@ import React from 'react';
 export default function Logo()
 {
     return (
+            <div class = "w-8/12">
             <svg
             version="1.0"
             xmlns="http://www.w3.org/2000/svg"
@@ -100,6 +101,7 @@ export default function Logo()
                 />
             </g>
             </svg>
+        </div>
     );
 }
 
