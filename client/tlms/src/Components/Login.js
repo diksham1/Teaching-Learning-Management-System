@@ -9,9 +9,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link , Redirect} from 'react-router-dom';
 import ROUTES from '../routes';
+import Logo from "./Logo.js"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,18 +48,24 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
 
+  const [redirect,setRedirect] = useState(null);
+
+  function handle(){
+      //will do api call here....
+      setRedirect(ROUTES.student.dashboard);
+  }
+
+  if(redirect){
+    return <Redirect to = {redirect} />
+  }
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+          <Logo />
           <form className={classes.form} noValidate>
             <TextField
               variant="outlined"
@@ -83,16 +90,16 @@ export default function Login() {
               autoComplete="current-password"
             />
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              component={Link} to={ROUTES.api.post.login}
+              onClick = {handle}
             >
               Log Me In
             </Button>
-          </form>
+          </form> 
         </div>
       </Grid>
     </Grid >
