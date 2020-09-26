@@ -3,7 +3,7 @@ import { Link , Redirect} from 'react-router-dom';
 import ROUTES from '../routes';
 import Logo from "./Logo.js"
 import Footer from "./Footer.js"
-import axios from 'axios'
+import axios from 'axios';
 
 
 export default function Login() {

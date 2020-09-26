@@ -1,11 +1,11 @@
-const base = 'https://localhost:8080'
+const base = 'http://localhost:8080'
 
 const ROUTES = {
     'student': {
         'dashboard': '/dashboard'
     },
     'api' :{
-        'post' : {
+        'get' : {
             'login': base + '/v1/login'
         }
     }
