@@ -8,8 +8,8 @@ router.get('/login', function (req, res) {
 
 /**
  * Creates a new user entry in the database
- * @todo: find a secure way to transfer password over wire
- * @todo: Use a logger instead to writing errors to console
+ * @todo find a secure way to transfer password over wire
+ * @todo Use a logger instead to writing errors to console
  */
 router.post('/users', async function(req, res) {
 	try {
