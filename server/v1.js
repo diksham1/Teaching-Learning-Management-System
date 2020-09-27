@@ -3,6 +3,7 @@ const router = express.Router()
 const dbconn = require('./dbconn')
 const createInviteCode = require('./createInviteCode')
 const createLiveClassLink = require('./createLiveClassLink')
+const ObjectID = require('mongodb').ObjectID;
 
 const errorOccuredResponse = {
 	"status": 500,
@@ -52,6 +53,8 @@ router.post('/courses', async function(req, res) {
 		
 		req.body["invite_code"] = inviteCode;
 		req.body["live_class_link"] = liveClassLink;
+		req.body["posts"] = [];
+		req.body["schema_ver"] = "1.0";
 		
 		const insertResponse = await col.insertOne(req.body);
 	
@@ -66,6 +69,22 @@ router.post('/courses', async function(req, res) {
 	} catch (e) {
 		console.log(e)
 		return res.json(errorOccuredResponse)
+	}
+})
+
+/**
+ * Get course details corresponding to a course ID
+ * @todo Allow user to Input Course IDs 
+ */
+router.get('/courses/:courseid', async function (req, res) {
+	try {
+		const db = await dbconn();
+		const col = db.collection('Course');
+		const courseDetails = await col.findOne({"_id": ObjectID(req.params.courseid)});
+		return res.json(courseDetails);
+	} catch (e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
 	}
 })
 
