@@ -11,8 +11,8 @@ const errorOccuredResponse = {
 
 /**
  * Creates a new user entry in the database
- * @todo find a secure way to transfer password over wire
- * @todo Use a logger instead to writing errors to console
+ *  @todo Find a secure way to transfer password over wire
+ *  @todo Use a logger instead to writing errors to console
  */
 router.post('/users', async function(req, res) {
 	try {
@@ -34,9 +34,8 @@ router.post('/users', async function(req, res) {
 
 /**
  * Create a new course and return class link and invite code
- * @todo create live class links with webRTC
- * @body Live Class Link is empty as of now
- * @todo Improve invite code creation algorithm
+ *  @todo Create live class links with webRTC
+ *  @todo Improve invite code creation algorithm
  */
 router.post('/courses', async function(req, res) {
 	try {
