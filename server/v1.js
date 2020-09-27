@@ -35,7 +35,7 @@ router.post('/users', async function(req, res) {
 /**
  * Create a new course and return class link and invite code
  * @todo create live class links with webRTC
- * @todo Use logger to record error
+ * @body Live Class Link is empty as of now
  * @todo Improve invite code creation algorithm
  */
 router.post('/courses', async function(req, res) {
