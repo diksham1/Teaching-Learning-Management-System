@@ -47,8 +47,7 @@ router.post('/courses', async function(req, res) {
 		
 		do {
 			inviteCode = await createInviteCode();
-			console.log(inviteCode);
-		} while (col.findOne({"invite_code": inviteCode}) != null);
+		} while (await col.findOne({"invite_code": inviteCode}) != null);
 			
 		liveClassLink = await createLiveClassLink();
 		
