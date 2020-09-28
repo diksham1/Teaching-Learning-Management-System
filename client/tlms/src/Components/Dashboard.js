@@ -6,7 +6,7 @@ import Join_Class_Overlay from './Join_Class_Overlay.js'
 export default function DashBoard(){
     return (
       <div>
-        <Header name="Tejaswini" />
+        <Header name="World" />
         <Footer />
       </div>
     );
