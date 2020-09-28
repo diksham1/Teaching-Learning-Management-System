@@ -37,7 +37,7 @@ export default function Login() {
         }}
       >
         <div class="flex flex-col w-6/12 h-5/12 bg-gray-200 justify-center items-center bg-opacity-50 hover:bg-opacity-75 rounded-lg p-4 border-4 border-red-700 shadow-2xl">
-          <div class = "w-8/12">
+          <div class = "md:w-8/12 w-11/12">
             <Logo />
           </div>
           
@@ -47,7 +47,7 @@ export default function Login() {
               type="text"
               id="username"
               placeholder="jane@example.com"
-              class="w-full rounded-lg p-4 focus:bg-gray-200 text-opacity-75"
+              class="w-full rounded-lg sm:p-4 p-2 focus:bg-gray-200 text-opacity-75"
             ></input>
           </div>
           <div class="mt-4 w-full text-2xl font-medium text-red-800">
@@ -58,19 +58,19 @@ export default function Login() {
               type="password"
               id="username"
               placeholder="'qwertyuiop' is a terrible password"
-              class="w-full rounded-lg p-4 focus:bg-gray-200 text-opacity-75"
+              class="w-full rounded-lg sm:p-4 p-2 focus:bg-gray-200 text-opacity-75"
             ></input>
           </div>
-          <div class="flex flex-col w-full px-8 sm:flex-row ">
+          <div class="flex flex-col w-full px-8 justify-center items-center sm:flex-row ">
             <button
               onClick={handle_login}
-              class="flex-1 px-4 py-2 m-4 w-1/2 bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
+              class="flex-1 px-4 py-2 m-4 md:w-1/2 w-full bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
             >
               Sign In
             </button>
             <button
               onClick={handle_signup}
-              class="flex-1 px-4 py-2 m-4 w-1/2 bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
+              class="flex-1 px-4 py-2 m-4 md:w-1/2 w-full bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
             >
               Sign Up
             </button>
