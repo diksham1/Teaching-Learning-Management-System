@@ -3,6 +3,7 @@ import './App.css';
 import Login from './Components/Login';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import DashBoard from './Components/Dashboard';
+import Class from './Components/Class';
 
 function App() {
   return (
@@ -13,6 +14,9 @@ function App() {
         </Switch>
         <Switch>
           <Route path="/dashboard" exact component={DashBoard} />
+        </Switch>
+        <Switch>
+          <Route path = "/class" exact component ={Class} />
         </Switch>
       </Router>
     </>

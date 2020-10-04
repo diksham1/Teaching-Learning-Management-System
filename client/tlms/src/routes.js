@@ -2,7 +2,8 @@ const base = 'http://localhost:8080'
 
 const ROUTES = {
     'student': {
-        'dashboard': '/dashboard'
+        'dashboard': '/dashboard',
+        'class'    : '/class'
     },
     'api' :{
         'get' : {
