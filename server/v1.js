@@ -88,4 +88,25 @@ router.get('/courses/:courseid', async function (req, res) {
 	}
 })
 
+//@todo set constraints on db to have unique email id
+router.get('/courses/:courseid/assignments', async function (req, res) {
+	try {
+		let assignmentList = []	
+		const db = await dbconn();
+		const col = db.collection('Course');	
+		let findPromise = await col.find(
+			{
+				"_id" : ObjectID(req.params.courseid),
+				"posts": {"$exists": true}
+			}
+		)
+		.project({"posts":1, "_id":0})
+		.toArray(function(err, assignmentList) {
+			return res.json({"assignment_list": assignmentList});
+		})
+	} catch (e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
+	}
+})
 module.exports = router;
