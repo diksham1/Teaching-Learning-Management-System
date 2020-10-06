@@ -244,7 +244,7 @@ router.get('/courses/:courseid/students/:studentid', async function (req, res) {
 	return res.json(userDetails);
 });
 
-// @todo comment every API in JSDoc format
+//@todo comment every API in JSDoc format
 router.get('/courses/:courseid/posts/:postid/comments', async function (req, res) {
 	const db = await dbconn();
 	await db.collection('Post').update(
