@@ -39,7 +39,7 @@ export default function Post(props){
         </div>
         <div class="bg-gray-300 cursor-pointer" onClick={toggleComments}>
           <div class="p-2 text-xl">{props.title}</div>
-          <div class="p-4">{props.text}</div>
+          <div class="p-4 leading-none">{props.text}</div>
         <div class = "w-full text-center"
         style = {{
             display : (props.hasAssignment)?"":"none"
@@ -55,7 +55,7 @@ export default function Post(props){
             name="Person1"
             comment="You look really cute...like really really cute"
           />
-          <Comment name="Person2" comment="The assignment..." />
+          <Comment name="Person2" comment="you mean the assignment..." />
           <Comment name="Person3" comment="yep..." />
         </div>
         <div
