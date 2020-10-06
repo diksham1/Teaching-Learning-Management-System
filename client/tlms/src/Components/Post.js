@@ -5,6 +5,8 @@ export default function Post(props){
 
     const [showComments,setShowComments] = useState(false)
     const [isUploaded,setisUploaded]     = useState(false)
+    const [isDone,setisDone]             = useState(false)
+    const [viewSubmissions,setviewSubmissions] = useState(false)
 
     function toggleComments(event){
         const s = Array.from(event.target.classList)
@@ -31,20 +33,59 @@ export default function Post(props){
             class="w-3/12 text-white font-bold  rounded-lg text-center p-1 ml-1"
             style={{
               display: props.hasAssignment ? "" : "none",
-              backgroundColor : (!isUploaded)?"rgb(204,35,22)":"rgb(22,204,22)"
+              backgroundColor: !isUploaded
+                ? "rgb(204,35,22)"
+                : "rgb(22,204,22)",
             }}
           >
-            {(!isUploaded)? "Due " + props.dueDate : "Submitted"}
+            {!isUploaded ? "Due " + props.dueDate : "Submitted"}
           </div>
         </div>
         <div class="bg-gray-300 cursor-pointer" onClick={toggleComments}>
           <div class="p-2 text-xl">{props.title}</div>
           <div class="p-4 leading-none">{props.text}</div>
-        <div class = "w-full text-center"
-        style = {{
-            display : (props.hasAssignment)?"":"none"
-        }}
-            ><button class = "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button">{(isUploaded)?"View Submission":"Upload Assignment"}</button></div>
+          <div
+            class="w-full text-center"
+            style={{
+              display: props.hasAssignment ? "" : "none",
+            }}
+          >
+            <button
+              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              style={{
+                display: props.isTeacher ? "none" : "",
+              }}
+              onClick={() => setisUploaded(true)}
+            >
+              {isUploaded ? "View Submission" : "Upload Assignment"}
+            </button>
+            <button
+              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              style={{
+                display: isUploaded ? "" : "none",
+              }}
+              onClick={() => setisUploaded(false)}
+            >
+              Unsubmit
+            </button>
+            <button
+              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              style={{
+                display: props.isTeacher ? "none" : "",
+              }}
+              onClick={() => setisDone((p) => !p)}
+            >
+              {isDone ? "Unmark as Done" : "Mark as Done"}
+            </button>
+            <button
+              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              style={{
+                display: props.isTeacher ? "" : "none",
+              }}
+            >
+              View Submissions
+            </button>
+          </div>
         </div>
         <div
           style={{
@@ -70,6 +111,17 @@ export default function Post(props){
           ></input>
           <button class="w-3/12 p-2 bg-gray-600 text-gray-200 hover:opacity-75 text-md rounded-lg">
             Post
+          </button>
+        </div>
+        <div class = "w-full text-center p-1">
+          <button
+            class="w-11/12 text-white font-bold hover:opacity-75 rounded-lg text-center p-2 my-2"
+            style={{
+              display: showComments ? "" : "none",
+              backgroundColor: "rgb(204,35,22)",
+            }}
+          >
+            Delete this Post
           </button>
         </div>
       </div>

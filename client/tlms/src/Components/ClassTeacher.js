@@ -9,16 +9,17 @@ import Mypost from "./Mypost";
 export default function Class() {
   return (
     <div>
-      <Header name="World" />
+      <Header name="Ice" />
       <div class="flex flex-row">
         <div class="mx-2 lg:w-2/12 w-3/12">
-          <SideBar classname="UI/UX Design" />
+          <SideBar classname="UI/UX Design" isTeacher = "true"/>
         </div>
         <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2">
           <Mypost isTeacher = "true"/>
           <Post
-            postername="World"
+            postername="You"
             hasAssignment="true"
+            isTeacher = "true"
             dueDate="Sept 23"
             title="Lorem Ipsum"
             text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
@@ -34,10 +35,11 @@ export default function Class() {
             text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
           />
           <Post
-            postername="World"
+            postername="You"
             title="Lorem Ipsum"
             text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             hasAssignment="true"
+            isTeacher = "true"
             dueDate="Oct 5"
           />
           <Post
