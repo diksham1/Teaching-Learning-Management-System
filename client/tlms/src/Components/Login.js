@@ -1,20 +1,27 @@
+//This module renders the Login page of the application.
+//The SignUpFormOverlay is imported from another module while the sign up overlay is present on page
+//props : none
+
+
 import React, { useState } from 'react';
 import { Link , Redirect} from 'react-router-dom';
 import ROUTES from '../routes';
 import Logo from "./Logo.js"
 import Footer from "./Footer.js"
-import axios from 'axios';
-import SignUpFormOverlay from './SignUpFormOverlay.js'
+import axios from 'axios';    //api calls
+import SignUpFormOverlay from './SignUpFormOverlay.js' //displayed on clicking "Sign Up"
 
 
 export default function Login() {
 
-  const [redirect, setRedirect] = useState(null);
-  const [isLogging,setisLogging] = useState(false);
-  const [showSignUpOverlay,setshowSignUpOverlay] = useState(false)
-  const [showSignInOverlay, setshowSignInOverlay] = useState(false);
+  const [redirect, setRedirect] = useState(null); //sets whether the page needs to redirect to another route or not,stores the redirect url
+  const [isLogging,setisLogging] = useState(false); //detects the logging while credentilas are being verified
+  const [showSignUpOverlay,setshowSignUpOverlay] = useState(false) //enalble/disable sign up form
+  const [showSignInOverlay, setshowSignInOverlay] = useState(false); //enable/disable sign in overlay options
 
+  //handles the case when signin button is clicked
   async function handle_login() {
+
     setisLogging(true); //this varible is to be used for custom message display. May be modified to include display messages 
     //const loginResponse = await axios.get(ROUTES.api.get.login);
     //console.log(loginResponse);
@@ -22,12 +29,14 @@ export default function Login() {
     setshowSignInOverlay(true)
   }
 
-  var c = 0;
   function handle_signup(){
+    //handles the case when sign up button is pressed
     setshowSignUpOverlay(true)
   }
 
   function handle_random_click_on_overlay(event){
+    //function to detect clicks when an overlay is visible. If the user clicks outside the overlay
+    //area, the overlay closes
     const s = event.target
     const t1 = Array.from(
       document.querySelector(".overlay").querySelectorAll("*")
@@ -45,7 +54,7 @@ export default function Login() {
   }
 
 
-  if (redirect) {
+  if (redirect) { //if redirect is true then redirect to a different route
     return <Redirect to={redirect} />;
   }
 
