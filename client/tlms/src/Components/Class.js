@@ -11,7 +11,7 @@ export default function Class(){
 
     return (
       <div>
-        <Header name="World" />
+        <Header name="World" isStudent = "true"/>
         <div class="flex flex-row">
           <div class="mx-2 lg:w-2/12 w-3/12">
             <SideBar classname="UI/UX Design" />

@@ -4,7 +4,6 @@ export default function Mypost(props){
 
   const [isAssignment,setisAssignment] = useState(false)
 
-
   function mypost_focus() {
     if (document.getElementById("mypost").innerHTML === "Write a Post") {
       document.getElementById("mypost").innerHTML = "";
@@ -36,7 +35,7 @@ export default function Mypost(props){
         </div>
         <div>
           <div
-            class="w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 border-b-2 border-gray-400 border-solid"
+            class="w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 border-b-2 border-gray-400 border-solid focus:text-opacity-100"
             id="myposttitle"
             contentEditable="true"
             onFocus={mypost_title_focus}
@@ -45,7 +44,7 @@ export default function Mypost(props){
             Post Title Here
           </div>
           <div
-            class="w-full bg-gray-100 text-black p-4 text-lg text-opacity-50"
+            class="w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 focus:text-opacity-100"
             id="mypost"
             contentEditable="true"
             onFocus={mypost_focus}

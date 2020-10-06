@@ -1,16 +1,12 @@
 import React ,{useState, useCallback} from 'react'
 import Header from './Header.js'
 import Footer from './Footer.js'
-import JoinClassOverlay from './JoinClassOverlay.js'
 import ClassCard from "./ClassCard.js"
 import TaskSideBar from "./TaskSideBar.js"
 
 
 export default function DashBoard(){
-
-
-    
-
+  
     return (
       <div>
         <Header name="World"/>
