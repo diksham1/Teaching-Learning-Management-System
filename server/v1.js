@@ -167,4 +167,28 @@ router.get('/courses/:courseid/assignments/:assignmentid', async function(req, r
 	})
 	return res.json(assignmentDetails);
 })
+
+router.post('/courses/:courseid/posts', async function(req, res) {
+	const db = await dbconn();
+	const insertResponse = await db.collection('Post').insertOne(req.body);
+	const insertedId = insertResponse["insertedId"]
+	db.collection('Course').update(
+		{
+			"_id": ObjectID(req.params.courseid),
+		},
+		{
+			"$push":	
+				{
+					"posts": insertedId.toString()
+				}
+		}
+	)
+
+	return res.json({
+		"statuscode": 201,	
+		"result": true,
+		"postId": insertResponse["insertedId"]
+	})
+});
+
 module.exports = router;
