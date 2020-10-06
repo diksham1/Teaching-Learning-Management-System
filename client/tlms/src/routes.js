@@ -5,6 +5,10 @@ const ROUTES = {
         'dashboard': '/dashboard',
         'class'    : '/class'
     },
+    'teachers' :{
+        'dashboard' : '/dashboard2',
+        'class'     : '/class2'
+    },
     'api' :{
         'get' : {
             'login': base + '/v1/login'

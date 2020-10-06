@@ -27,7 +27,7 @@ export default function SideBar(props){
         </div>
         <div class="w-full flex flex-col outline-none items-center h-1/12 m-2">
           <button class="border-b-2 hover:border-opacity-50 hover:text-blue-500 text-lg focus:text-blue-400 border-black content-center w-9/12 p-2">
-            Attend Live Class
+            {(props.isTeacher)?"Start Livestream":"Attend Live Class"}
           </button>
         </div>
         <div class="w-full flex flex-col outline-none items-center h-1/12 m-2">

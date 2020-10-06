@@ -15,6 +15,12 @@ const errorOccuredResponse = {
  *  @todo Find a secure way to transfer password over wire
  *  @todo Use a logger instead to writing errors to console
  */
+
+router.get('/',async function(req,res){
+	res.send("<h1>APIs currently under developement.</h1>");
+})
+
+
 router.post('/users', async function(req, res) {
 	try {
 		const db = await dbconn();
@@ -86,7 +92,7 @@ router.get('/courses/:courseid', async function (req, res) {
 	} catch (e) {
 		console.log(e);
 		return res.json(errorOccuredResponse);
-	}
+	} 
 })
 
 /**
