@@ -94,4 +94,107 @@ router.get('/courses/:courseid', async function (req, res) {
 	} 
 })
 
+/**
+ * Get post IDs of all posts which are assignments for a particular course
+ */
+//@todo set constraints on db to have unique email id
+router.get('/courses/:courseid/assignments', async function (req, res) {
+	try {
+		let assignmentList = []	
+		const db = await dbconn();
+		const col = db.collection('Course');	
+
+		const postIdList = await col.find({
+			"_id" : ObjectID(req.params.courseid),
+			"posts": {"$exists": true}
+		})
+		.project({"posts":1, "_id":0})
+		.toArray()
+		.then((postIdDocument) => {
+			return postIdDocument[0]["posts"].map((postId) => ObjectID(postId));
+		})
+		
+		const postsWithAssignmentIDList = await db.collection('Post').find({
+			"_id": {
+				"$in": postIdList
+			},
+			"assignment_id": {"$exists": true}
+		})
+		.project({"_id":1})
+		.toArray()
+		.then((postWithAssignmentIdDocumentArray) => {
+			return postWithAssignmentIdDocumentArray.map((postIdDocument) => {
+				return postIdDocument["_id"]
+			})
+		})
+
+		return res.json({"assignment_list": postsWithAssignmentIDList});
+	} catch (e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
+	}
+})
+
+router.post('/courses/:courseid/assignments', async function (req, res) {
+	const db = await dbconn();
+	const col = db.collection('Assignment');
+	let assignmentData = req.body;
+
+	delete assignmentData["description"]
+	delete assignmentData["file_url"]
+
+	assignmentData["submissions"] = []	
+	assignmentData["schema_ver"] = 1.0
+	const insertResponse = await col.insertOne(assignmentData);
+	const insertId = insertResponse["insertedId"]
+
+	let assignmentPost = {};
+	assignmentPost["creator_ID"] = req.body["creator_ID"]
+	assignmentPost["post_title"] = "Assignment"
+	assignmentPost["post_text"] = req.body["description"]
+	assignmentPost["files"] = [req.body["file_url"]]
+	assignmentPost["assignment_id"] = insertId;
+	assignmentPost["comments"] = []	
+
+	const postInsertResponse = await db.collection('Post').insertOne(assignmentPost)
+	const postId = postInsertResponse["insertedId"]
+
+	return res.json({
+		"statuscode": 201,
+		"assignment_id": postId,
+		"result": true
+	});
+})
+
+router.get('/courses/:courseid/assignments/:assignmentid', async function(req, res) {
+	const db = await dbconn();
+	const assignmentDetails = await db.collection('Assignment').findOne({
+		"_id": ObjectID(req.params.assignmentid)
+	})
+	return res.json(assignmentDetails);
+})
+
+router.post('/courses/:courseid/posts', async function(req, res) {
+	const db = await dbconn();
+	const insertResponse = await db.collection('Post').insertOne(req.body);
+	const insertedId = insertResponse["insertedId"]
+	db.collection('Course').update(
+		{
+			"_id": ObjectID(req.params.courseid),
+		},
+		{
+			"$push":	
+				{
+					"posts": insertedId.toString()
+				}
+		}
+	)
+
+	return res.json({
+		"statuscode": 201,	
+		"result": true,
+		"postId": insertResponse["insertedId"]
+	})
+});
+
 module.exports = router;
