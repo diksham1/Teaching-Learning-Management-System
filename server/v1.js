@@ -128,4 +128,43 @@ router.get('/courses/:courseid/assignments', async function (req, res) {
 		return res.json(errorOccuredResponse);
 	}
 })
+
+router.post('/courses/:courseid/assignments', async function (req, res) {
+	const db = await dbconn();
+	const col = db.collection('Assignment');
+	let assignmentData = req.body;
+
+	delete assignmentData["description"]
+	delete assignmentData["file_url"]
+
+	assignmentData["submissions"] = []	
+	assignmentData["schema_ver"] = 1.0
+	const insertResponse = await col.insertOne(assignmentData);
+	const insertId = insertResponse["insertedId"]
+
+	let assignmentPost = {};
+	assignmentPost["creator_ID"] = req.body["creator_ID"]
+	assignmentPost["post_title"] = "Assignment"
+	assignmentPost["post_text"] = req.body["description"]
+	assignmentPost["files"] = [req.body["file_url"]]
+	assignmentPost["assignment_id"] = insertId;
+	assignmentPost["comments"] = []	
+
+	const postInsertResponse = await db.collection('Post').insertOne(assignmentPost)
+	const postId = postInsertResponse["insertedId"]
+
+	return res.json({
+		"statuscode": 201,
+		"assignment_id": postId,
+		"result": true
+	});
+})
+
+router.get('/courses/:courseid/assignments/:assignmentid', async function(req, res) {
+	const db = await dbconn();
+	const assignmentDetails = await db.collection('Assignment').findOne({
+		"_id": ObjectID(req.params.assignmentid)
+	})
+	return res.json(assignmentDetails);
+})
 module.exports = router;
