@@ -19,6 +19,7 @@ router.post('/users', async function(req, res) {
 	try {
 		const db = await dbconn();
 		const user = req.body;
+		user['courses'] = []
 		const col = db.collection("User");
 		const insertResponse = await col.insertOne(user);
 		res.json({
@@ -191,4 +192,88 @@ router.post('/courses/:courseid/posts', async function(req, res) {
 	})
 });
 
+router.post('/courses/:courseid/students', async function(req, res) {
+	const userId = req.body["userID"]
+	const courseId = req.params.courseid;
+	
+	const db = await dbconn();
+	db.collection('User').update(
+		{
+			"_id": ObjectID(userId)
+		},
+		{
+			"$push": {"courses": courseId}
+		}
+	);
+	return res.json({"statuscode":201, "result": true})
+});
+
+router.get('/courses/:courseid/students', async function(req, res) {
+	try{
+		const courseId = req.params.courseid;
+		const db = await dbconn();
+		const userList = await db.collection('User').find({
+			"courses": courseId
+		})	
+		.project({	
+			"_id": 1,
+			"name": 1,
+			"email": 1,
+			"phone_number": 1
+		})
+		.toArray();
+		return res.json({"students": userList});
+	} catch(e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
+	}
+});
+
+router.get('/courses/:courseid/students/:studentid', async function (req, res) {
+	const studentId = req.params.studentid;
+	const db = await dbconn();
+	const userDetails = await db.collection('User').findOne({
+		'_id': ObjectID(studentId)
+	});
+	return res.json(userDetails);
+});
+
+// @todo comment every API in JSDoc format
+router.get('/courses/:courseid/posts/:postid/comments', async function (req, res) {
+	const db = await dbconn();
+	await db.collection('Post').update(
+		{
+			"_id": ObjectID(req.params.postid)
+		},
+		{
+			"$push": {"comments": req.body}
+		}
+	)
+	return res.json({"statuscode": 201, "result": true})
+});
+
+router.get('/courses/:courseid/posts', async function (req, res) {
+	const courseId = req.params.courseid;
+	const db = await dbconn();
+	const postIDs = await db.collection('Course').find({
+		'_id': ObjectID(courseId)
+	})
+	.project({
+		"posts": 1,
+		"_id": 0
+	})
+	.limit(1)
+	.toArray();
+
+	return res.json({"posts": postIDs[0]["posts"]})
+})
+
+router.get('/courses/:courseid/posts/:postid', async function(req, res) {
+	const db = await dbconn();
+	const postId = req.params.postid;
+	const postDetails = await db.collection('Post').findOne({
+		"_id": ObjectID(postId)
+	})
+	return res.json(postDetails);
+})
 module.exports = router;
