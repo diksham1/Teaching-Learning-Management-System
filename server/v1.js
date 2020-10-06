@@ -88,22 +88,41 @@ router.get('/courses/:courseid', async function (req, res) {
 	}
 })
 
+/**
+ * Get post IDs of all posts which are assignments for a particular course
+ */
 //@todo set constraints on db to have unique email id
 router.get('/courses/:courseid/assignments', async function (req, res) {
 	try {
 		let assignmentList = []	
 		const db = await dbconn();
 		const col = db.collection('Course');	
-		let findPromise = await col.find(
-			{
-				"_id" : ObjectID(req.params.courseid),
-				"posts": {"$exists": true}
-			}
-		)
-		.project({"posts":1, "_id":0})
-		.toArray(function(err, assignmentList) {
-			return res.json({"assignment_list": assignmentList});
+
+		const postIdList = await col.find({
+			"_id" : ObjectID(req.params.courseid),
+			"posts": {"$exists": true}
 		})
+		.project({"posts":1, "_id":0})
+		.toArray()
+		.then((postIdDocument) => {
+			return postIdDocument[0]["posts"].map((postId) => ObjectID(postId));
+		})
+		
+		const postsWithAssignmentIDList = await db.collection('Post').find({
+			"_id": {
+				"$in": postIdList
+			},
+			"assignment_id": {"$exists": true}
+		})
+		.project({"_id":1})
+		.toArray()
+		.then((postWithAssignmentIdDocumentArray) => {
+			return postWithAssignmentIdDocumentArray.map((postIdDocument) => {
+				return postIdDocument["_id"]
+			})
+		})
+
+		return res.json({"assignment_list": postsWithAssignmentIDList});
 	} catch (e) {
 		console.log(e);
 		return res.json(errorOccuredResponse);
