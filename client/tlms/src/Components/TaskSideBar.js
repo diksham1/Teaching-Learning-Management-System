@@ -6,7 +6,7 @@ export default function TaskSideBar(props){
     return (
       <div class="w-full flex flex-col md:space-y-4 mr-6 my-2 p-4">
         <div class="bg-gray-700 font-medium text-3xl rounded-sm border-2 border-gray-400 text-gray-200 text-center">
-          Pinned Tasks
+          My Tasks
         </div>
         <TaskCard task="Task 1" desc="Sample Description 1" />
         <TaskCard task="Task 2" desc="Sample Description 2" />

@@ -3,6 +3,7 @@
 //For teacher there are two variants depending on whether the a particualr class is open(in which case the option to add a new assignemnt becomes available)
 
 import React, { useState } from "react";
+import {Link, Redirect} from 'react-router-dom'
 import Logo from "./Logo.js";
 import JoinClassOverlay from "./JoinClassOverlay.js";
 import CreateClassOverlay from './CreateClassOverlay'
@@ -46,9 +47,9 @@ export default function Headers(props) {
         </div>
       </div>
       <div class="grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200">
-        <button class="col-span-2 m-2 items-end justify-end">
-          <Logo />
-        </button>
+          <Link class="col-span-2 m-2 items-end justify-end" to = "/">
+            <Logo />
+          </Link>
         <div class="col-span-6 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
           <div>Learning Management System</div>
         </div>
@@ -86,9 +87,9 @@ export default function Headers(props) {
           </div>
         </div>
         <div class="grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200">
-          <button class="col-span-2 m-2 items-end justify-end">
-            <Logo />
-          </button>
+            <Link class="col-span-2 m-2 items-end justify-end" to="/">
+              <Logo />
+            </Link>
           <div class="col-span-6 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
             <div>Learning Management System</div>
           </div>
