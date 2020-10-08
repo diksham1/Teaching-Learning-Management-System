@@ -9,7 +9,7 @@ export default function DashBoard(){
   
     return (
       <div>
-        <Header name="World" isStudent = "true"/>
+        <Header name="World"/>
         <div class="flex flex-row">
           <div class="lg:w-9/12 w-full flex flex-col space-y-4 px-16 py-2 ">
             <ClassCard

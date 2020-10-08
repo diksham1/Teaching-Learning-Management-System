@@ -7,6 +7,7 @@ import {Link, Redirect} from 'react-router-dom'
 import Logo from "./Logo.js";
 import JoinClassOverlay from "./JoinClassOverlay.js";
 import CreateClassOverlay from './CreateClassOverlay'
+import LogoutButton from './LogoutButton'
 
 export default function Headers(props) {
   const [showJoinClassOverlay, setshowJoinClassOverlay] = useState(false);
@@ -50,7 +51,7 @@ export default function Headers(props) {
           <Link class="col-span-2 m-2 items-end justify-end" to = "/">
             <Logo />
           </Link>
-        <div class="col-span-6 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
+        <div class="col-span-5 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
           <div>Learning Management System</div>
         </div>
 
@@ -87,10 +88,10 @@ export default function Headers(props) {
           </div>
         </div>
         <div class="grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200">
-            <Link class="col-span-2 m-2 items-end justify-end" to="/">
-              <Logo />
-            </Link>
-          <div class="col-span-6 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
+          <Link class="col-span-2 m-2 items-end justify-end" to="/">
+            <Logo />
+          </Link>
+          <div class="col-span-5 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
             <div>Learning Management System</div>
           </div>
 
@@ -101,12 +102,21 @@ export default function Headers(props) {
           >
             Create Class
           </button>
-
           <button
-            class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
+            class="col-span-2  m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
             onClick={() => {}}
           >
             Hello {props.name}
+          </button>
+          <button
+            class="col-span-1 m-2 p-2 text-2xl rounded-full border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
+            onClick={() => {}}
+          >
+            <div class="flex flex-row items-center justify-center">
+              <div class = "w-7/12">
+                <LogoutButton />
+              </div>
+            </div>
           </button>
         </div>
       </div>
