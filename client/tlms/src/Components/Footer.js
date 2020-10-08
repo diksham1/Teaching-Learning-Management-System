@@ -1,9 +1,34 @@
 import React from 'react'
 
+//ये फ़िलहाल निर्माणाधीन है।
+
 export default function Footer(){
     return (
-      <div class="w-screen h-32 bg-gray-200 text-red-900 flex flex-row justify-center items-center text-4xl">
-        ये फ़िलहाल निर्माणाधीन है।
+      <div class="w-screen px-16 py-12 space-x-2 bg-black flex flex-row justify-center items-center">
+        <div class="w-3/12 h-full text-white bg-black">
+          <div class="text-yellow-800 text-lg mb-4">Reach Out to Us</div>
+          <div class="text-sm hover:font-semibold">
+            <a href="mailto:dikshamodi28@gmail.com">Diksha Modi</a>
+          </div>
+          <div class="text-sm hover:font-semibold">
+            <a href="mailto:dikshamodi28@gmail.com">Subham Kumar Modi</a>
+          </div>
+          <div class="text-sm hover:font-semibold">
+            <a href="mailto:dikshamodi28@gmail.com">Kunal Ojha</a>
+          </div>
+        </div>
+        <div class="h-full w-5/12 text-white bg-black">
+          <div class = "text-yellow-800 mb-4">Source Code available at :</div>
+          <div class = "text-sm">
+            <a href="https://github.com/diksham1/Teaching-Learning-Management-System" target = "new">
+              https://github.com/diksham1/Teaching-Learning-Management-System
+            </a>
+          </div>
+        </div>
+        <div class="h-full w-4/12 text-yellow-700 text-opacity-50 text-xl bg-black">
+          <div>MIT License</div>
+          <div>Copyright (c) 2020 Diksha Modi</div>
+        </div>
       </div>
     );
 }
