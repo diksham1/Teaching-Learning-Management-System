@@ -48,7 +48,7 @@ export default function Headers(props) {
         </div>
       </div>
       <div class="grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200">
-          <Link class="col-span-2 m-2 items-end justify-end" to = "/">
+          <Link class="col-span-2 m-2 items-end justify-end" to = "/" onClick = {this.blur()}>
             <Logo />
           </Link>
         <div class="col-span-5 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">

@@ -9,10 +9,12 @@ export default function ClassCard(props){
 
     }
     return (
-      <button class="border-2 border-gray-400 text-left shadow-xl hover:shadow-2xl" 
+      <button class="border-2 border-gray-400 post text-left shadow-xl hover:shadow-2xl focus:shadow-none" 
       onClick = {handle_click}
       onMouseEnter = {() => setisHovered(true)}
-      onMouseLeave = {() => setisHovered(false)}
+      onMouseLeave = {() => {(Array.from(document.getElementsByClassName('post')).includes(document.activeElement))?setisHovered(true):setisHovered(false)}}
+      onFocus      = {() => setisHovered(true)}
+      onBlur       = {() => setisHovered(false)}
       >
         <div class="w-full text-2xl bg-gray-400 text-gray-900 font-bold p-2">
           {props.classCode}
