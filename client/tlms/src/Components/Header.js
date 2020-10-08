@@ -48,15 +48,15 @@ export default function Headers(props) {
         </div>
       </div>
       <div class="grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200">
-          <Link class="col-span-2 m-2 items-end justify-end" to = "/" onClick = {this.blur()}>
-            <Logo />
-          </Link>
+        <Link class="col-span-2 m-2 items-end justify-end" to="/">
+          <Logo />
+        </Link>
         <div class="col-span-5 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
           <div>Learning Management System</div>
         </div>
 
         <button
-          class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
+          class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
           onClick={() => setshowJoinClassOverlay(true)}
           id="btn_join"
         >
@@ -64,10 +64,20 @@ export default function Headers(props) {
         </button>
 
         <button
-          class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
+          class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
           onClick={() => {}}
         >
           Hello {props.name}
+        </button>
+        <button
+          class="col-span-1 m-2 p-2 text-2xl rounded-full border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+          onClick={() => {}}
+        >
+          <div class="flex flex-row items-center justify-center">
+            <div class="w-7/12">
+              <LogoutButton />
+            </div>
+          </div>
         </button>
       </div>
     </div>
@@ -96,24 +106,24 @@ export default function Headers(props) {
           </div>
 
           <button
-            class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
+            class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
             onClick={() => setshowCreateClassOverlay(true)}
             id="btn_join"
           >
             Create Class
           </button>
           <button
-            class="col-span-2  m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
+            class="col-span-2  m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
             onClick={() => {}}
           >
             Hello {props.name}
           </button>
           <button
-            class="col-span-1 m-2 p-2 text-2xl rounded-full border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200"
+            class="col-span-1 m-2 p-2 text-2xl rounded-full border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
             onClick={() => {}}
           >
             <div class="flex flex-row items-center justify-center">
-              <div class = "w-7/12">
+              <div class="w-7/12">
                 <LogoutButton />
               </div>
             </div>
