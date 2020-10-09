@@ -13,7 +13,7 @@ export default function Headers(props) {
   const [showJoinClassOverlay, setshowJoinClassOverlay] = useState(false);
   const [showCreateClassOverlay, setshowCreateClassOverlay] = useState(false);
 
-  async function handle_class_join_overlay(event) {
+  function handle_class_join_overlay(event) {
     const s = event.target;
     const t = Array.from(
       document.querySelector(".joinClassOverlay").querySelectorAll("*")
@@ -23,7 +23,7 @@ export default function Headers(props) {
     }
   }
 
-  async function handle_create_class_overlay(event){
+  function handle_create_class_overlay(event){
     const s = event.target;
     const t = Array.from(
       document.querySelector(".createClassOverlay").querySelectorAll("*")
@@ -33,30 +33,45 @@ export default function Headers(props) {
     }
   }
 
+  async function handle_logout(){
+    window.location.replace("/")
+  }
+
+  const outerDiv = "w-screen h-screen z-10 bg-gray-800 bg-opacity-75 flex flex-col justify-center items-center absolute"
+  const joinoverlay = "absolute md:w-3/12 w-6/12 joinClassOverlay"
+  const createoverlay = "absolute md:w-3/12 w-6/12 createClassOverlay";
+  const paneldiv =
+    "grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200";
+  const logolink = "col-span-2 m-2 items-end justify-end"
+  const applicationtitle =
+    "col-span-5 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start";
+  const buttoncss = "col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none focus:shadow-none"
+  const logoutButton = "col-span-1 m-2 p-2 text-2xl rounded-full border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+
   if(props.isStudent){
   return (
     <div>
       <div
-        class=" w-screen h-screen z-10 bg-gray-800 bg-opacity-75 flex flex-col justify-center items-center absolute"
+        class={outerDiv}
         style={{
           display: showJoinClassOverlay ? "flex" : "none",
         }}
         onClick={handle_class_join_overlay}
       >
-        <div class="absolute md:w-3/12 w-6/12 joinClassOverlay">
+        <div class={joinoverlay}>
           <JoinClassOverlay />
         </div>
       </div>
-      <div class="grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200">
-        <Link class="col-span-2 m-2 items-end justify-end" to="/">
+      <div class={paneldiv}>
+        <Link class={logolink} to="/">
           <Logo />
         </Link>
-        <div class="col-span-5 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
+        <div class={applicationtitle}>
           <div>Learning Management System</div>
         </div>
 
         <button
-          class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+          class= {buttoncss}
           onClick={() => setshowJoinClassOverlay(true)}
           id="btn_join"
         >
@@ -64,16 +79,19 @@ export default function Headers(props) {
         </button>
 
         <button
-          class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+          class={buttoncss}
           onClick={() => {}}
         >
           Hello {props.name}
         </button>
         <button
-          class="col-span-1 m-2 p-2 text-2xl rounded-full border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+          class= {logoutButton}
           onClick={() => {}}
         >
-          <div class="flex flex-row items-center justify-center">
+          <div
+            class="flex flex-row items-center justify-center"
+            onClick={handle_logout}
+          >
             <div class="w-7/12">
               <LogoutButton />
             </div>
@@ -83,46 +101,48 @@ export default function Headers(props) {
     </div>
   );
   }
+
   else{
     return (
       <div>
         <div
-          class=" w-screen h-screen z-10 bg-gray-800 bg-opacity-75 flex flex-col justify-center items-center absolute"
+          class={outerDiv}
           style={{
             display: showCreateClassOverlay ? "flex" : "none",
           }}
           onClick={handle_create_class_overlay}
         >
-          <div class="absolute md:w-4/12 w-7/12 createClassOverlay">
+          <div class={createoverlay}>
             <CreateClassOverlay />
           </div>
         </div>
-        <div class="grid lg:grid-cols-12 grid-cols-6 px-2 mx-2 my-2 bg-gray-200">
-          <Link class="col-span-2 m-2 items-end justify-end" to="/">
+        <div class={paneldiv}>
+          <Link class={logolink} to="/">
             <Logo />
           </Link>
-          <div class="col-span-5 lg:inline hidden text-3xl p-1 mb-2 mt-4 mr-2 items-end justify-start">
+          <div class={applicationtitle}>
             <div>Learning Management System</div>
           </div>
 
           <button
-            class="col-span-2 m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+            class={buttoncss}
             onClick={() => setshowCreateClassOverlay(true)}
             id="btn_join"
           >
             Create Class
           </button>
           <button
-            class="col-span-2  m-2 text-2xl border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+            class={buttoncss}
             onClick={() => {}}
           >
             Hello {props.name}
           </button>
           <button
-            class="col-span-1 m-2 p-2 text-2xl rounded-full border-gray-600 hover:shadow-xl shadow-md border-opacity-75 border-solid border-2 bg-gray-200 focus:outline-none"
+            class={logoutButton}
             onClick={() => {}}
           >
-            <div class="flex flex-row items-center justify-center">
+            <div class="flex flex-row items-center justify-center"
+            onClick = {handle_logout}>
               <div class="w-7/12">
                 <LogoutButton />
               </div>

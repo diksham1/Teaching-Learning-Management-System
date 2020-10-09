@@ -2,10 +2,10 @@ import React from 'react'
 
 export default function FilePanel(props){
     return (
-      <div>
-        <div>{props.fileName}</div>
+      <div class = "w-full flex flex-row">
+        <div class = "w-6/12">{props.name}</div>
         <div>
-            <a href = {props.fileurl}>Download</a>
+    <a class = "w-6/12" href = {props.fileurl}>{props.filename}</a>
         </div>
       </div>
     );

@@ -27,15 +27,28 @@ export default function Mypost(props){
     }
   }
 
+
+  const outerdiv = "w-full shadow-xl hover:shadow-2xl" 
+  const nameposter = "bg-gray-700 text-gray-200 p-4 cursor-pointer text-2xl"
+  const posttitle = "w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 border-b-2 border-gray-400 border-solid focus:text-opacity-100"
+  const postbody = "w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 focus:text-opacity-100"
+  const optdivcss = "w-full bg-gray-100 text-white p-4 text-lg flex flex-row justify-end"
+  const buttoncss1 = "rounded-lg text-center w-4/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold"
+  const inputcss1 = "rounded-lg text-center w-4/12 p-2 mx-2 text-black ng-gray-200 hover:opacity-75 font-semibold"
+  const buttoncss2 = "rounded-lg text-center w-2/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold"
+  const buttoncss3 =
+    "rounded-lg text-center w-2/12 p-2 mx-2 bg-red-600 hover:opacity-75 font-semibold";
+
+
   return (
     <div>
-      <div class="w-full shadow-xl hover:shadow-2xl">
-        <div class="bg-gray-700 text-gray-200 p-4 cursor-pointer text-2xl">
+      <div class= {outerdiv}>
+        <div class= {nameposter}>
           You
         </div>
         <div>
           <div
-            class="w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 border-b-2 border-gray-400 border-solid focus:text-opacity-100"
+            class={posttitle}
             id="myposttitle"
             contentEditable="true"
             onFocus={mypost_title_focus}
@@ -44,7 +57,7 @@ export default function Mypost(props){
             Post Title Here
           </div>
           <div
-            class="w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 focus:text-opacity-100"
+            class={postbody}
             id="mypost"
             contentEditable="true"
             onFocus={mypost_focus}
@@ -52,9 +65,9 @@ export default function Mypost(props){
           >
             Write a Post
           </div>
-          <div class="w-full bg-gray-100 text-white p-4 text-lg flex flex-row justify-end">
+          <div class={optdivcss}>
             <button
-              class="rounded-lg text-center w-4/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold"
+              class={buttoncss1}
               style={{
                 display: props.isTeacher ? "" : "none",
               }}
@@ -64,15 +77,15 @@ export default function Mypost(props){
             </button>
             <input
               type="date"
-              class="rounded-lg text-center w-4/12 p-2 mx-2 text-black ng-gray-200 hover:opacity-75 font-semibold"
+              class={inputcss1}
               style={{
                 display: isAssignment ? "" : "none",
               }}
             ></input>
-            <button class="rounded-lg text-center w-2/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold">
+            <button class={buttoncss2}>
               Attach File
             </button>
-            <button class="rounded-lg text-center w-2/12 p-2 mx-2 bg-red-600 hover:opacity-75 font-semibold">
+            <button class={buttoncss3}>
               Post
             </button>
           </div>

@@ -15,14 +15,14 @@ import SignUpFormOverlay from './SignUpFormOverlay.js' //displayed on clicking "
 export default function Login() {
 
   const [redirect, setRedirect] = useState(null); //sets whether the page needs to redirect to another route or not,stores the redirect url
-  const [isLogging,setisLogging] = useState(false); //detects the logging while credentilas are being verified
+  const [custommessage,setcustommessage] = useState(null); //detects the logging while credentilas are being verified
   const [showSignUpOverlay,setshowSignUpOverlay] = useState(false) //enalble/disable sign up form
   const [showSignInOverlay, setshowSignInOverlay] = useState(false); //enable/disable sign in overlay options
 
   //handles the case when signin button is clicked
   async function handle_login() {
 
-    setisLogging(true); //this varible is to be used for custom message display. May be modified to include display messages 
+    setcustommessage("Signing In...."); //this varible is to be used for custom message display. May be modified to include display messages 
     //const loginResponse = await axios.get(ROUTES.api.get.login);
     //console.log(loginResponse);
     //setRedirect(ROUTES.student.dashboard);
@@ -51,7 +51,26 @@ export default function Login() {
     if (!t2.includes(s)) {
       setshowSignInOverlay(false)
     }
+    setcustommessage(null)
   }
+
+
+
+  const overlaycss = "bg-black bg-opacity-75 z-10 fixed w-screen h-screen flex flex-row items-center justify-center"
+  const overlaycss2 = "md:w-5/12 w-8/12 overlay"
+  const overlaycss3 =
+    "bg-black bg-opacity-50 z-10 fixed w-screen h-screen flex flex-row items-center justify-center";
+  const overlaycss4 = "md:w-3/12 w-5/12 p-4 flex flex-col overlay2 bg-gray-200 border-red-700 borde-solid border-2"
+  const overlaybuttoncss = "m-1 bg-red-700 hover:bg-red-600 p-2 rounded-lg"
+  const backgroundcss = "w-screen h-screen flex flex-col justify-center items-center"
+  const logocss = "flex flex-col w-6/12 h-5/12 bg-gray-200 justify-center items-center bg-opacity-50 hover:bg-opacity-75 rounded-lg p-4 border-4 border-red-700 shadow-2xl"
+  const logocss2 = "md:w-8/12 w-11/12";
+  const forminputtitle = "mt-4 w-full text-2xl font-medium text-red-800"
+  const forminput =
+    "w-full rounded-lg sm:p-4 p-2 focus:bg-gray-200 text-opacity-75";
+  const buttoncss = "flex-1 px-4 py-2 m-4 md:w-1/2 w-full bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
+  const remainingcss1 = "flex flex-col w-full px-8 justify-center items-center sm:flex-row "
+  const remainingcss2 = "flex flex-row w-full p-2 m-2 text-4xl justify-center font-bold"
 
 
   if (redirect) { //if redirect is true then redirect to a different route
@@ -61,77 +80,72 @@ export default function Login() {
   return (
     <div>
       <div
-        class="bg-black bg-opacity-75 z-10 fixed w-screen h-screen flex flex-row items-center justify-center"
+        class={overlaycss}
         style={{
           display: showSignUpOverlay ? "flex" : "none",
         }}
         onClick={handle_random_click_on_overlay}
       >
-        <div class="md:w-5/12 w-8/12 overlay">
+        <div class={overlaycss2}>
           <SignUpFormOverlay />
         </div>
       </div>
       <div
-        class="bg-black bg-opacity-50 z-10 fixed w-screen h-screen flex flex-row items-center justify-center"
+        class={overlaycss3}
         style={{
           display: showSignInOverlay ? "flex" : "none",
         }}
         onClick={handle_random_click_on_overlay}
       >
-        <div class="md:w-3/12 w-5/12 p-4 flex flex-col overlay2 bg-gray-200 border-red-700 borde-solid border-2">
-          <button class = "m-1 bg-red-700 hover:bg-red-600 p-2 rounded-lg">Sign In as Educator</button>
-          <button class = "m-1 bg-red-700 hover:bg-red-600 p-2 rounded-lg">Sign In as Educatee</button>
+        <div class={overlaycss4}>
+          <button class={overlaybuttoncss}>Sign In as Educator</button>
+          <button class={overlaybuttoncss}>Sign In as Educatee</button>
         </div>
       </div>
       <div
-        class="w-screen h-screen flex flex-col justify-center items-center"
+        class={backgroundcss}
         style={{
           backgroundImage: "url(/images/classroom.jpg)",
           backgroundSize: "cover",
         }}
       >
-        <div class="flex flex-col w-6/12 h-5/12 bg-gray-200 justify-center items-center bg-opacity-50 hover:bg-opacity-75 rounded-lg p-4 border-4 border-red-700 shadow-2xl">
-          <div class="md:w-8/12 w-11/12">
+        <div class={logocss}>
+          <div class={logocss2}>
             <Logo />
           </div>
 
-          <div class="mt-4 w-full text-2xl font-medium text-red-800">Email</div>
+          <div class={forminputtitle}>Email</div>
           <div class="w-full">
             <input
               type="text"
               id="username"
               placeholder="jane@example.com"
-              class="w-full rounded-lg sm:p-4 p-2 focus:bg-gray-200 text-opacity-75"
+              class={forminput}
             ></input>
           </div>
-          <div class="mt-4 w-full text-2xl font-medium text-red-800">
-            Password
-          </div>
+          <div class={forminputtitle}>Password</div>
           <div class="w-full">
             <input
               type="password"
               id="username"
               placeholder="'qwertyuiop' is a terrible password"
-              class="w-full rounded-lg sm:p-4 p-2 focus:bg-gray-200 text-opacity-75"
+              class={forminput}
             ></input>
           </div>
-          <div class="flex flex-col w-full px-8 justify-center items-center sm:flex-row ">
-            <button
-              onClick={handle_login}
-              class="flex-1 px-4 py-2 m-4 md:w-1/2 w-full bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
-            >
+          <div class={remainingcss1}>
+            <button onClick={handle_login} class={buttoncss}>
               Sign In
             </button>
-            <button
-              onClick={handle_signup}
-              class="flex-1 px-4 py-2 m-4 md:w-1/2 w-full bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
-            >
+            <button onClick={handle_signup} class={buttoncss}>
               Sign Up
             </button>
           </div>
-        </div>
-        <div class="flex flex-row w-6/12 p-2 m-2 text-4xl justify-center font-extrabold">
-          <div>{isLogging ? "Logging you In...." : ""}</div>
+          <div class= {remainingcss2}
+            style = {{
+              display : (custommessage)?"":"none"
+            }}>
+            <div>{custommessage}</div>
+          </div>
         </div>
       </div>
       <Footer />

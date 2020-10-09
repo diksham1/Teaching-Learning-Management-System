@@ -14,15 +14,32 @@ export default function Post(props){
             setShowComments(p => !p)
     }
 
+
+    const outerdiv = "w-full shadow-xl hover:shadow-2xl"
+    const mainpost = "flex flex-row bg-gray-700 text-gray-200 p-4 cursor-pointer"
+    const imposter = "w-7/12 text-2xl";
+    const css4 = "w-2/12 bg-yellow-700 text-black font-bold rounded-lg text-center p-1"
+    const css5 = "w-3/12 text-white font-bold  rounded-lg text-center p-1 ml-1"
+    const css6 = "bg-gray-300 cursor-pointer"
+    const css7 = "p-2 text-xl"
+    const css8 = "p-4 leading-none"
+    const css9 = "w-full text-center"
+    const css10 = "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+    const cssbored1 = "flex flex-row"
+    const cssbored2 = "w-9/12 p-3 bg-gray-200 focus:bg-gray-300 text-black text-lg rounded-lg"
+    const cssbored3 = "w-3/12 p-2 bg-gray-600 text-gray-200 hover:opacity-75 text-md rounded-lg"
+    const cssbored4 = "w-full text-center p-1"
+    const cssbored5 = "w-11/12 text-white font-bold hover:opacity-75 rounded-lg text-center p-2 my-2"
+
     return (
-      <div class="w-full shadow-xl hover:shadow-2xl">
+      <div class={outerdiv}>
         <div
-          class="flex flex-row bg-gray-700 text-gray-200 p-4 cursor-pointer"
+          class={mainpost}
           onClick={toggleComments}
         >
-          <div class="w-7/12 text-2xl">{props.postername}</div>
+          <div class={imposter}>{props.postername}</div>
           <div
-            class="w-2/12 bg-yellow-700 text-black font-bold rounded-lg text-center p-1"
+            class={css4}
             style={{
               display: props.hasAssignment ? "" : "none",
             }}
@@ -30,7 +47,7 @@ export default function Post(props){
             Assignment
           </div>
           <div
-            class="w-3/12 text-white font-bold  rounded-lg text-center p-1 ml-1"
+            class={css5}
             style={{
               display: props.hasAssignment ? "" : "none",
               backgroundColor: !isUploaded
@@ -41,17 +58,17 @@ export default function Post(props){
             {!isUploaded ? "Due " + props.dueDate : "Submitted"}
           </div>
         </div>
-        <div class="bg-gray-300 cursor-pointer" onClick={toggleComments}>
-          <div class="p-2 text-xl">{props.title}</div>
-          <div class="p-4 leading-none">{props.text}</div>
+        <div class={css6} onClick={toggleComments}>
+          <div class={css7}>{props.title}</div>
+          <div class={css8}>{props.text}</div>
           <div
-            class="w-full text-center"
+            class={css9}
             style={{
               display: props.hasAssignment ? "" : "none",
             }}
           >
             <button
-              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              class={css10}
               style={{
                 display: props.isTeacher ? "none" : "",
               }}
@@ -60,7 +77,7 @@ export default function Post(props){
               {isUploaded ? "View Submission" : "Upload Assignment"}
             </button>
             <button
-              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              class={css10}
               style={{
                 display: isUploaded ? "" : "none",
               }}
@@ -69,7 +86,7 @@ export default function Post(props){
               Unsubmit
             </button>
             <button
-              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              class={css10}
               style={{
                 display: props.isTeacher ? "none" : "",
               }}
@@ -78,7 +95,7 @@ export default function Post(props){
               {isDone ? "Unmark as Done" : "Mark as Done"}
             </button>
             <button
-              class="p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button"
+              class={css10}
               style={{
                 display: props.isTeacher ? "" : "none",
               }}
@@ -100,22 +117,22 @@ export default function Post(props){
           <Comment name="Person3" comment="yep..." />
         </div>
         <div
-          class="flex flex-row"
+          class={cssbored1}
           style={{
             display: showComments ? "" : "none",
           }}
         >
           <input
-            class="w-9/12 p-3 bg-gray-200 focus:bg-gray-300 text-black text-lg rounded-lg"
+            class={cssbored2}
             placeholder="Your Comment here"
           ></input>
-          <button class="w-3/12 p-2 bg-gray-600 text-gray-200 hover:opacity-75 text-md rounded-lg">
+          <button class={cssbored3}>
             Post
           </button>
         </div>
-        <div class = "w-full text-center p-1">
+        <div class ={cssbored4} >
           <button
-            class="w-11/12 text-white font-bold hover:opacity-75 rounded-lg text-center p-2 my-2"
+            class={cssbored5}
             style={{
               display: showComments ? "" : "none",
               backgroundColor: "rgb(204,35,22)",
