@@ -5,10 +5,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import DashBoard from './Components/Dashboard';
 import Class from './Components/Class';
 import ClassTeacher from "./Components/ClassTeacher"
+import AuthContextProvider from "./Contexts/AuthContext.js"
 
 function App() {
   return (
-    <>
+    <AuthContextProvider>
       <Router>
         <Switch>
           <Route path="/" exact component={Login} />
@@ -23,7 +24,7 @@ function App() {
           <Route path="/class2" exact component={ClassTeacher} />
         </Switch>
       </Router>
-    </>
+    </AuthContextProvider>
   );
 }
 

@@ -10,11 +10,9 @@ const ROUTES = {
         'class'     : '/class2'
     },
     'api' :{
-        'get' : {
-            'login': base + '/v1/login'
-        },
         'post' : {
-            'users': base + '/v1/users'
+            'users': base + '/v1/users',
+            'login': base + '/v1/login'
         }
     }
 }

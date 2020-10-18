@@ -10,6 +10,7 @@ import Logo from "./Logo.js"
 import Footer from "./Footer.js"
 import axios from 'axios';    //api calls
 import SignUpFormOverlay from './SignUpFormOverlay.js' //displayed on clicking "Sign Up"
+import {AuthContext} from '../Contexts/AuthContext'
 
 
 export default function Login() {
@@ -18,6 +19,9 @@ export default function Login() {
   const [custommessage,setcustommessage] = useState(""); //detects the logging while credentilas are being verified
   const [showSignUpOverlay,setshowSignUpOverlay] = useState(false) //enalble/disable sign up form
   const [showSignInOverlay, setshowSignInOverlay] = useState(false); //enable/disable sign in overlay options
+  const p = useContext(AuthContext)
+
+  
 
   async function setUserMessage(p){
     setcustommessage(p)
@@ -33,10 +37,11 @@ export default function Login() {
   //handles the case when signin button is clicked
   async function handle_login() {
 
-    setcustommessage("Signing In...."); //this varible is to be used for custom message display. May be modified to include display messages 
+    setcustommessage(""); //this varible is to be used for custom message display. May be modified to include display messages 
     //const loginResponse = await axios.get(ROUTES.api.get.login);
     //console.log(loginResponse);
     //setRedirect(ROUTES.student.dashboard);
+    console.log(p);
     setshowSignInOverlay(true)
   }
 
