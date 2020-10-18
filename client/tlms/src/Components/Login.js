@@ -3,7 +3,7 @@
 //props : none
 
 
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 import { Link , Redirect} from 'react-router-dom';
 import ROUTES from '../routes';
 import Logo from "./Logo.js"
@@ -15,9 +15,20 @@ import SignUpFormOverlay from './SignUpFormOverlay.js' //displayed on clicking "
 export default function Login() {
 
   const [redirect, setRedirect] = useState(null); //sets whether the page needs to redirect to another route or not,stores the redirect url
-  const [custommessage,setcustommessage] = useState(null); //detects the logging while credentilas are being verified
+  const [custommessage,setcustommessage] = useState(""); //detects the logging while credentilas are being verified
   const [showSignUpOverlay,setshowSignUpOverlay] = useState(false) //enalble/disable sign up form
   const [showSignInOverlay, setshowSignInOverlay] = useState(false); //enable/disable sign in overlay options
+
+  async function setUserMessage(p){
+    setcustommessage(p)
+    document.getElementById("name").value = ""; 
+    document.getElementById("email").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("cpassword").value = "";
+    setshowSignUpOverlay(false)
+  }
+
 
   //handles the case when signin button is clicked
   async function handle_login() {
@@ -51,7 +62,6 @@ export default function Login() {
     if (!t2.includes(s)) {
       setshowSignInOverlay(false)
     }
-    setcustommessage(null)
   }
 
 
@@ -70,7 +80,7 @@ export default function Login() {
     "w-full rounded-lg sm:p-4 p-2 focus:bg-gray-200 text-opacity-75";
   const buttoncss = "flex-1 px-4 py-2 m-4 md:w-1/2 w-full bg-red-700 hover:bg-red-600 hover:z-10 rounded-lg text-lg"
   const remainingcss1 = "flex flex-col w-full px-8 justify-center items-center sm:flex-row "
-  const remainingcss2 = "flex flex-row w-full p-2 m-2 text-4xl justify-center font-bold"
+  const remainingcss2 = "flex flex-row w-full p-2 m-2 text-2xl justify-center font-bold"
 
 
   if (redirect) { //if redirect is true then redirect to a different route
@@ -87,7 +97,7 @@ export default function Login() {
         onClick={handle_random_click_on_overlay}
       >
         <div class={overlaycss2}>
-          <SignUpFormOverlay />
+          <SignUpFormOverlay setusrmsg = {setUserMessage}/>
         </div>
       </div>
       <div

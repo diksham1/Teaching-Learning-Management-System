@@ -20,6 +20,9 @@ export default function SideBar(props){
     async function handle_click_past_recording() {
       setisCurrentlyActive(5);
     }
+    async function handle_click_create_test(){
+      setisCurrentlyActive(6)
+    }
     
 
     //CSS 
@@ -69,6 +72,19 @@ export default function SideBar(props){
             onClick={handle_click_assignments}
           >
             Assignments
+          </button>
+        </div>
+        <div class={outerButtonDiv}
+          style = {{
+            display : (props.isTeacher)?"":"none"
+          }}>
+          <button
+            class={buttonStyle.concat(
+              isCurrentlyActive == 6 ? " text-blue-400 font-semibold" : ""
+            )}
+            onClick={handle_click_create_test}
+          >
+            Create Test
           </button>
         </div>
         <div class={outerButtonDiv}>
