@@ -23,10 +23,19 @@ router.get('/',async function(req,res){
 
 router.post('/users', async function(req, res) {
 	try {
+		let exists = false
 		const db = await dbconn();
 		const user = req.body;
+		user["schema_ver"] = 1;
 		user['courses'] = []
 		const col = db.collection("User");
+
+		const check1 = (await col.findOne({"email" : req.body.email})) == null //checking uniqueness of documents
+		const check2 = (await col.findOne({"phone" : req.body.phone})) == null
+		exists = (check1 || check2)?false:true
+		if(exists)
+			return res.json(errorOccuredResponse)
+
 		const insertResponse = await col.insertOne(user);
 		res.json({
 			"statuscode": 201,

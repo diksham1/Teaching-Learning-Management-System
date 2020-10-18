@@ -12,6 +12,9 @@ const ROUTES = {
     'api' :{
         'get' : {
             'login': base + '/v1/login'
+        },
+        'post' : {
+            'users': base + '/v1/users'
         }
     }
 }
