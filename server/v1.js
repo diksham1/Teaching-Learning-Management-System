@@ -4,6 +4,7 @@ const dbconn = require('./dbconn')
 const createInviteCode = require('./createInviteCode')
 const createLiveClassLink = require('./createLiveClassLink')
 const ObjectID = require('mongodb').ObjectID;
+const bcrypt = require('bcrypt')
 
 const errorOccuredResponse = {
 	"status": 500,
@@ -20,6 +21,12 @@ router.get('/',async function(req,res){
 	res.send("<h1>APIs currently under developement.</h1>");
 })
 
+router.get('/scrap',async function(req,res){ //only to be user to delete all test documents
+	const db = await dbconn()
+	db.collection('User').remove({})
+	res.send("hey")
+})
+
 
 router.post('/users', async function(req, res) {
 	try {
@@ -28,8 +35,13 @@ router.post('/users', async function(req, res) {
 		const user = req.body;
 		user["schema_ver"] = 1;
 		user['courses'] = []
-		const col = db.collection("User");
+		const saltRounds = 10
+		bcrypt.hash(req.body.password,saltRounds,(err,hash) => {
+			console.log(hash)
+			user['password'] = hash
+		})
 
+		const col = db.collection("User");
 		const check1 = (await col.findOne({"email" : req.body.email})) == null //checking uniqueness of documents
 		const check2 = (await col.findOne({"phone" : req.body.phone})) == null
 		exists = (check1 || check2)?false:true
