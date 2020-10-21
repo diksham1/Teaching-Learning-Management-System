@@ -49,6 +49,7 @@ router.post('/login',async (req,res) => {
 				if(sm){
 					res.json({
 						statuscode: 201,
+						_id : queryResponse._id,
 						name : queryResponse.name,
             			result: true,
           			});	
@@ -72,25 +73,26 @@ router.post('/users', async function(req, res) {
 		const user = req.body;
 		user["schema_ver"] = 1;
 		user['courses'] = []
-		
-		bcrypt.hash(req.body.password,saltRounds,(err,hash) => {
+		const col = db.collection("User");
+		const check1 = (await col.findOne({ email: req.body.email })) == null;
+
+		bcrypt.hash(req.body.password,saltRounds,async (err,hash) => {
 			console.log(hash)
 			user['password'] = hash
+
+			exists = (check1)?false:true
+			if(exists)
+				return res.json(errorOccuredResponse)
+
+			const insertResponse = await col.insertOne(user);
+			res.json({
+				"statuscode": 201,
+				"_id": insertResponse["ops"][0]["_id"],
+				"result": true	
+			});
 		})
 
-		const col = db.collection("User");
-		const check1 = (await col.findOne({"email" : req.body.email})) == null //checking uniqueness of documents
-		const check2 = (await col.findOne({"phone" : req.body.phone})) == null
-		exists = (check1 || check2)?false:true
-		if(exists)
-			return res.json(errorOccuredResponse)
-
-		const insertResponse = await col.insertOne(user);
-		res.json({
-			"statuscode": 201,
-			"_id": insertResponse["ops"][0]["_id"],
-			"result": true	
-		});	
+			
 	} catch(e) {
 		console.log(e);
 		return res.json(errorOccuredResponse)
@@ -119,7 +121,7 @@ router.post('/courses', async function(req, res) {
 		req.body["invite_code"] = inviteCode;
 		req.body["live_class_link"] = liveClassLink;
 		req.body["posts"] = [];
-		req.body["schema_ver"] = "1.0";
+		req.body["schema_ver"] = 1.0;
 		
 		const insertResponse = await col.insertOne(req.body);
 	
@@ -135,7 +137,7 @@ router.post('/courses', async function(req, res) {
 		console.log(e)
 		return res.json(errorOccuredResponse)
 	}
-})
+}) 
 
 /**
  * Get course details corresponding to a course ID
