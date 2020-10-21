@@ -48,7 +48,8 @@ router.post('/login',async (req,res) => {
 			else{
 				if(sm){
 					res.json({
-            			statuscode: 201,
+						statuscode: 201,
+						name : queryResponse.name,
             			result: true,
           			});	
 				}
