@@ -19,7 +19,7 @@ export default function Login() {
   const [custommessage,setcustommessage] = useState(""); //detects the logging while credentilas are being verified
   const [showSignUpOverlay,setshowSignUpOverlay] = useState(false) //enalble/disable sign up form
   const [showSignInOverlay, setshowSignInOverlay] = useState(false); //enable/disable sign in overlay options
-  const p = useContext(AuthContext)
+  const authContext = useContext(AuthContext)
 
   
 
@@ -34,14 +34,45 @@ export default function Login() {
   }
 
 
+  async function handle_sign_in_educatee(){
+    setshowSignInOverlay(false)
+    const email = document.getElementById('usr').value
+    const password = document.getElementById('pswd').value
+
+    const response = await axios.post(ROUTES.api.post.login,{'email' : email , 'password' : password})
+    if(response.data.result == false)
+      setcustommessage("Login Failed")
+    else{
+      setcustommessage("Login Successful");
+      authContext.toggleisLoggedIn_state()
+      authContext.setname_state(response.data.name)
+      authContext.setemail_state(email)
+      setRedirect('/dashboard')
+    }
+
+  }
+  async function handle_sign_in_educator(){
+    setshowSignInOverlay(false)
+    const email = document.getElementById('usr').value
+    const password = document.getElementById('pswd').value
+
+    const response = await axios.post(ROUTES.api.post.login,{'email' : email , 'password' : password})
+    if(response.data.result == false)
+      setcustommessage("Login Failed")
+    else{
+      setcustommessage("Login Successful");
+      authContext.toggleisLoggedIn_state()
+      authContext.setemail_state(email)
+      authContext.setname_state(response.data.name)
+      authContext.toggleisEducator_state()
+      setRedirect('/dashboard')
+    }
+  }
+
   //handles the case when signin button is clicked
   async function handle_login() {
-
-    setcustommessage(""); //this varible is to be used for custom message display. May be modified to include display messages 
-    //const loginResponse = await axios.get(ROUTES.api.get.login);
-    //console.log(loginResponse);
-    //setRedirect(ROUTES.student.dashboard);
-    console.log(p);
+    setcustommessage("Signing In....");
+    //console.log(authContext)
     setshowSignInOverlay(true)
   }
 
@@ -66,6 +97,7 @@ export default function Login() {
     }
     if (!t2.includes(s)) {
       setshowSignInOverlay(false)
+      setcustommessage("")
     }
   }
 
@@ -113,8 +145,8 @@ export default function Login() {
         onClick={handle_random_click_on_overlay}
       >
         <div class={overlaycss4}>
-          <button class={overlaybuttoncss}>Sign In as Educator</button>
-          <button class={overlaybuttoncss}>Sign In as Educatee</button>
+          <button class={overlaybuttoncss} onClick = {handle_sign_in_educatee}>Sign In as Educatee</button>
+          <button class={overlaybuttoncss} onClick = {handle_sign_in_educator}>Sign In as Educator</button>
         </div>
       </div>
       <div
@@ -133,7 +165,7 @@ export default function Login() {
           <div class="w-full">
             <input
               type="text"
-              id="username"
+              id="usr"
               placeholder="jane@example.com"
               class={forminput}
             ></input>
@@ -142,16 +174,17 @@ export default function Login() {
           <div class="w-full">
             <input
               type="password"
-              id="username"
+              id="pswd"
               placeholder="'qwertyuiop' is a terrible password"
               class={forminput}
             ></input>
           </div>
           <div class={remainingcss1}>
-            <button onClick={handle_login} class={buttoncss}>
+            <button onClick={handle_login} onEnter={handle_login}
+            class={buttoncss}>
               Sign In
             </button>
-            <button onClick={handle_signup} class={buttoncss}>
+            <button onClick={handle_signup} onEnter={handle_signup} class={buttoncss}>
               Sign Up
             </button>
           </div>
