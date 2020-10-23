@@ -7,7 +7,8 @@ class AuthContextProvider extends Component {
     isLoggedIn_state: false,
     isEducator_state: false,
     email_state: "",
-    name_state: ""
+    name_state: "",
+    id_state : ""
   };
 
   toggleisLoggedIn_state = () => {
@@ -26,6 +27,10 @@ class AuthContextProvider extends Component {
     this.setState( {name_state : p} )
   }
 
+  setid_state = (p) => {
+    this.setState({id_state : p})
+  }
+
   render() {
     return (
       <AuthContext.Provider value={
@@ -33,7 +38,8 @@ class AuthContextProvider extends Component {
           toggleisLoggedIn_state : this.toggleisLoggedIn_state,
           setemail_state : this.setemail_state,
           setname_state : this.setname_state,
-          toggleisEducator_state : this.toggleisEducator_state
+          toggleisEducator_state : this.toggleisEducator_state,
+          setid_state  : this.setid_state
         }}>
         {this.props.children}
       </AuthContext.Provider>

@@ -47,6 +47,7 @@ export default function Login() {
       authContext.toggleisLoggedIn_state()
       authContext.setname_state(response.data.name)
       authContext.setemail_state(email)
+      authContext.setid_state(response.data._id);
       setRedirect('/dashboard')
     }
 
@@ -65,6 +66,7 @@ export default function Login() {
       authContext.setemail_state(email)
       authContext.setname_state(response.data.name)
       authContext.toggleisEducator_state()
+      authContext.setid_state(response.data._id)
       setRedirect('/dashboard')
     }
   }
