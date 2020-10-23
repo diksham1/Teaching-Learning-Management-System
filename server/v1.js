@@ -105,8 +105,13 @@ router.post('/users', async function(req, res) {
  *  @todo Create live class links with webRTC
  *  @todo Improve invite code creation algorithm
  */
+
+
 router.post('/courses', async function(req, res) {
 	try {
+
+		if(!req.body.name)
+			return res.json(errorOccuredResponse)
 		const db = await dbconn();
 		const col = db.collection('Course')
 		let inviteCode = null;
@@ -258,20 +263,43 @@ router.post('/courses/:courseid/posts', async function(req, res) {
 	})
 });
 
+
+//here onwards courseid would mean invite_code because it is unique and convenient
+/**
+ * @todo prevent the creator of the class from joining their own classes
+ */
 router.post('/courses/:courseid/students', async function(req, res) {
-	const userId = req.body["userID"]
-	const courseId = req.params.courseid;
-	
-	const db = await dbconn();
-	db.collection('User').update(
-		{
-			"_id": ObjectID(userId)
-		},
-		{
-			"$push": {"courses": courseId}
+	try{
+		const userId = req.body["userID"]
+		const inviteCode = req.params.courseid;
+
+		const db = await dbconn();
+
+		const queryResponse = await db.collection('Course').findOne({invite_code : inviteCode})
+
+		if(queryResponse.creator_id == userId){
+			throw "User same as creator"
 		}
-	);
-	return res.json({"statuscode":201, "result": true})
+		
+		if(queryResponse === null){
+			throw "Not Valid Class"
+		}
+		else{
+			db.collection('User').update(
+				{
+					"_id": ObjectID(userId)
+				},
+				{
+					"$push": {"courses": inviteCode}
+				}
+			);
+
+			return res.json({"statuscode":201, "result": true})
+		}
+	} catch(e){
+		console.log(e)
+		return res.json(errorOccuredResponse);
+	}
 });
 
 router.get('/courses/:courseid/students', async function(req, res) {
