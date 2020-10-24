@@ -13,6 +13,11 @@ const ROUTES = {
         'post' : {
             'users': base + '/v1/users',
             'login': base + '/v1/login'
+        },
+        'get'   : {
+            'users' : base + '/v1/users',
+            'courses' : base + '/v1/courses',
+            'creatorcourses' : base + '/v1/courses/creator'
         }
     }
 }
