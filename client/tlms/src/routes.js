@@ -12,7 +12,8 @@ const ROUTES = {
     'api' :{
         'post' : {
             'users': base + '/v1/users',
-            'login': base + '/v1/login'
+            'login': base + '/v1/login',
+            'courses' : base + '/v1/courses'
         },
         'get'   : {
             'users' : base + '/v1/users',
