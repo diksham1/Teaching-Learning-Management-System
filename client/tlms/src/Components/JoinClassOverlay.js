@@ -14,6 +14,7 @@ export default function JoinClassOverlay(props){
       })
       console.log(res)
       props.f(false)
+      document.getElementById("cid").value = ""
     }
 
 

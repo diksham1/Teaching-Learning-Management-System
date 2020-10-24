@@ -19,6 +19,8 @@ export default function CreateClassOverlay(props){
         })
         console.log(res)
         props.f(false)
+        document.getElementById("classname_inp").value = "";
+        document.getElementById("class_desc_inp").innerHTML = "";
 
     }
 
