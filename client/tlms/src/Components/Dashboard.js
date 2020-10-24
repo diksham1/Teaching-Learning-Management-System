@@ -52,7 +52,7 @@ export default function DashBoard(){
         <div class="flex flex-row">
           <div class="lg:w-9/12 w-full flex flex-col space-y-4 px-16 py-2 ">
             {(course_array == null)? "" : course_array.map((course) => (
-              <ClassCard key={course} classCode={course} />
+              <ClassCard key={course} classCode={course} isStudent = {!authContext.isEducator_state}/>
               ))
             }
           </div>

@@ -59,7 +59,7 @@ export default function Headers(props) {
         onClick={handle_class_join_overlay}
       >
         <div class={joinoverlay}>
-          <JoinClassOverlay />
+          <JoinClassOverlay f={setshowJoinClassOverlay} />
         </div>
       </div>
       <div class={paneldiv}>
@@ -71,23 +71,17 @@ export default function Headers(props) {
         </div>
 
         <button
-          class= {buttoncss}
+          class={buttoncss}
           onClick={() => setshowJoinClassOverlay(true)}
           id="btn_join"
         >
           Join Class
         </button>
 
-        <button
-          class={buttoncss}
-          onClick={() => {}}
-        >
+        <button class={buttoncss} onClick={() => {}}>
           Hello {props.name}
         </button>
-        <button
-          class= {logoutButton}
-          onClick={() => {}}
-        >
+        <button class={logoutButton} onClick={() => {}}>
           <div
             class="flex flex-row items-center justify-center"
             onClick={handle_logout}
@@ -113,7 +107,7 @@ export default function Headers(props) {
           onClick={handle_create_class_overlay}
         >
           <div class={createoverlay}>
-            <CreateClassOverlay />
+            <CreateClassOverlay f={setshowCreateClassOverlay} />
           </div>
         </div>
         <div class={paneldiv}>
@@ -131,18 +125,14 @@ export default function Headers(props) {
           >
             Create Class
           </button>
-          <button
-            class={buttoncss}
-            onClick={() => {}}
-          >
+          <button class={buttoncss} onClick={() => {}}>
             Hello {props.name}
           </button>
-          <button
-            class={logoutButton}
-            onClick={() => {}}
-          >
-            <div class="flex flex-row items-center justify-center"
-            onClick = {handle_logout}>
+          <button class={logoutButton} onClick={() => {}}>
+            <div
+              class="flex flex-row items-center justify-center"
+              onClick={handle_logout}
+            >
               <div class="w-7/12">
                 <LogoutButton />
               </div>

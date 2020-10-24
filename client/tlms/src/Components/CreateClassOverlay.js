@@ -1,6 +1,26 @@
-import React from 'react'
+import React,{useContext} from 'react'
+import {AuthContext} from '../Contexts/AuthContext'
+import axios from 'axios'
+import ROUTES from '../routes'
 
-export default function CreateClassOverlay(){
+export default function CreateClassOverlay(props){
+
+    const authContext = useContext(AuthContext)
+
+    async function handle_press(){
+      const p1 = document.getElementById('classname_inp').value
+      const p2 = document.getElementById('class_desc_inp').innerHTML
+      const res = await axios.post(ROUTES.api.post.courses,
+        { 
+          "creator_id" : authContext.id_state,
+          "creator_name" : authContext.name_state,
+          "name" : p1,
+          "course_desc" : p2
+        })
+        console.log(res)
+        props.f(false)
+
+    }
 
     const outerDiv = "bg-gray-200 flex w-full h-full flex-col border-red-700 border-solid border-2"
     const titleDiv = "bg-gray-900 w-full p-4 text-3xl font-bold border-solid border-white border-2 text-white"
@@ -21,6 +41,7 @@ export default function CreateClassOverlay(){
           <div class={formelementtitle}>Name of your Course</div>
           <input
             type="text"
+            id = "classname_inp"
             class={formInput}
           ></input>
         </div>
@@ -29,6 +50,7 @@ export default function CreateClassOverlay(){
           <div
             type="text"
             class={formInputDesc}
+            id = "class_desc_inp"
             contentEditable = "true"
           ></div>
         </div>
@@ -36,6 +58,7 @@ export default function CreateClassOverlay(){
           <button
             type="button"
             class= {buttoncss}
+            onClick = {handle_press}
           >
             Create Class
           </button>

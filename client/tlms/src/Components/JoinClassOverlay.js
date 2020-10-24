@@ -1,6 +1,20 @@
-import React from 'react'
+import React,{useContext} from 'react'
+import axios from 'axios'
+import {AuthContext} from '../Contexts/AuthContext'
+import ROUTES from '../routes'
 
 export default function JoinClassOverlay(props){
+
+    const authContext = useContext(AuthContext)
+
+    async function handle_press(){
+      const cid = document.getElementById('cid').value
+      const res = await axios.post(ROUTES.api.post.courses + "/"+ cid + "/students",{
+        "userID" : authContext.id_state
+      })
+      console.log(res)
+      props.f(false)
+    }
 
 
     const outerdiv = "bg-gray-200 flex w-full h-full flex-col border-red-700 border-solid border-2" 
@@ -21,12 +35,14 @@ export default function JoinClassOverlay(props){
           <input
             type="text"
             class={inputcss}
+            id = "cid"
           ></input>
         </div>
         <div class="flex flex-row items-center justify-center p-2">
           <button
             type="button"
             class={buttonsubmit}
+            onClick = {handle_press}
           >
             Join Class
           </button>

@@ -174,6 +174,8 @@ router.get('/courses/:courseid', async function (req, res) {
 	} 
 })
 
+
+//returns all courses of a given creator
 router.get('/courses/creator/:creatorid', async function (req, res) {
 	try {
 		const db = await dbconn();
