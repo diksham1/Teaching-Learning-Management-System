@@ -30,6 +30,7 @@ router.get('/scrap',async function(req,res){ //only to be user to delete all tes
 })
  */
 
+
 router.post('/login',async (req,res) => {
 	try{
 		const db = await dbconn();
@@ -66,7 +67,7 @@ router.post('/login',async (req,res) => {
 	}
 })
 
-router.post('/users', async function(req, res) {
+router.post('/users',async function(req, res) {
 	try {
 		let exists = false
 		const db = await dbconn();
@@ -95,6 +96,19 @@ router.post('/users', async function(req, res) {
 			
 	} catch(e) {
 		console.log(e);
+		return res.json(errorOccuredResponse)
+	}
+})
+
+router.get('/users/:userid',async function(req,res){
+	try{
+		console.log(req.params.userid)
+		const db = await dbconn()
+		const queryResponse = await db.collection('User').findOne({"_id" : ObjectID(req.params.userid)})
+		return res.json(queryResponse)
+	}
+	catch(e){
+		console.log(e)
 		return res.json(errorOccuredResponse)
 	}
 })
@@ -152,8 +166,28 @@ router.get('/courses/:courseid', async function (req, res) {
 	try {
 		const db = await dbconn();
 		const col = db.collection('Course');
-		const courseDetails = await col.findOne({"_id": ObjectID(req.params.courseid)});
+		const courseDetails = await col.findOne({"invite_code": req.params.courseid});
 		return res.json(courseDetails);
+	} catch (e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
+	} 
+})
+
+router.get('/courses/creator/:creatorid', async function (req, res) {
+	try {
+		const db = await dbconn();
+		const col = db.collection('Course');
+		const courseDetails = await col.find({"creator_id": req.params.creatorid})
+		.project(
+			{
+				"_id" : 0,
+				"invite_code" : 1
+			}
+		)
+		.toArray();
+		return res.json({ 'courses' : courseDetails})
+		
 	} catch (e) {
 		console.log(e);
 		return res.json(errorOccuredResponse);
@@ -264,10 +298,6 @@ router.post('/courses/:courseid/posts', async function(req, res) {
 });
 
 
-//here onwards courseid would mean invite_code because it is unique and convenient
-/**
- * @todo prevent the creator of the class from joining their own classes
- */
 router.post('/courses/:courseid/students', async function(req, res) {
 	try{
 		const userId = req.body["userID"]
