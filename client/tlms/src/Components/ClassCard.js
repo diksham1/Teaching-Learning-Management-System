@@ -1,11 +1,17 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import axios from 'axios'
 import ROUTES from '../routes'
+import {Link} from 'react-router-dom'
+import {AuthContext} from '../Contexts/AuthContext'
+import {ClassContext} from "../Contexts/ClassContext"
 
 
 export default function ClassCard(props){
 
     const [apicallresult,setapicallresult] = useState(null)
+
+    const authContext = useContext(AuthContext)
+    const classContext = useContext(ClassContext)
 
     useEffect(()=>{
       async function f(){
@@ -25,37 +31,49 @@ export default function ClassCard(props){
 
     async function handle_click(){
         //do api call here to get info about the relevent classes
-
+        classContext.setclassName_state(apicallresult.name)
+        classContext.setclassCode_state(apicallresult.invite_code)
+        classContext.setcreator_name_state(apicallresult.creator_name)
     }
+    
     return (
-      <button
+      <Link
+        to={authContext.isEducator_state ? "/class2" : "class"}
         class="border-2 border-gray-400 post text-left shadow-xl hover:shadow-2xl focus:shadow-none"
-        onClick={handle_click}
-        onMouseEnter={() => setisHovered(true)}
-        onMouseLeave={() => {
-          Array.from(document.getElementsByClassName("post")).includes(
-            document.activeElement
-          )
-            ? setisHovered(true)
-            : setisHovered(false);
-        }}
-        onFocus={() => setisHovered(true)}
-        onBlur={() => setisHovered(false)}
       >
-        <div class={classcodeDiv}>
-          {apicallresult == null ? "" : apicallresult.invite_code}
-        </div>
-        <div class={classnameDiv}>
-          {apicallresult == null ? "" : apicallresult.name}
-        </div>
-        <div class={classdescDiv}>
-          <div class="font-medium">
-            {apicallresult == null ? "" : ((props.isStudent)?apicallresult.creator_name:"Your Class")}
+        <button
+          class = "w-full text-left"
+          onClick={handle_click}
+          onMouseEnter={() => setisHovered(true)}
+          onMouseLeave={() => {
+            Array.from(document.getElementsByClassName("post")).includes(
+              document.activeElement
+            )
+              ? setisHovered(true)
+              : setisHovered(false);
+          }}
+          onFocus={() => setisHovered(true)}
+          onBlur={() => setisHovered(false)}
+        >
+          <div class={classcodeDiv}>
+            {apicallresult == null ? "" : apicallresult.invite_code}
           </div>
-          <div style={{ display: isHovered ? "block" : "none" }}>
-            <i>{apicallresult == null ? "" : apicallresult.course_desc}</i>
+          <div class={classnameDiv}>
+            {apicallresult == null ? "" : apicallresult.name}
           </div>
-        </div>
-      </button>
+          <div class={classdescDiv}>
+            <div class="font-medium">
+              {apicallresult == null
+                ? ""
+                : props.isStudent
+                ? apicallresult.creator_name
+                : "Your Class"}
+            </div>
+            <div style={{ display: isHovered ? "block" : "none" }}>
+              <i>{apicallresult == null ? "" : apicallresult.course_desc}</i>
+            </div>
+          </div>
+        </button>
+      </Link>
     );
 }
