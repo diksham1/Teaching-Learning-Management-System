@@ -150,7 +150,9 @@ export default function SideBar(props){
             )}
             onClick={handle_click_back}
           >
-            {'< ' + 'Back'}
+            <Link to="/dashboard">
+              {"< " + "Back"}
+            </Link>
           </button>
         </div>
       </div>
