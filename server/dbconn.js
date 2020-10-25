@@ -8,11 +8,16 @@ const uri = `mongodb+srv://${username}:${password}@tlms.1so97.mongodb.net/tlms?r
 
 const dbName = "tlms";
 
+/**
+ * @todo figure out a way to store the db connection and reuse it.
+ */
+
 async function dbconn() {
 	try {
 		const client = new MongoClient(uri, { useNewUrlParser: true });
 		await client.connect();
-        const db = client.db(dbName);
+		const db = client.db(dbName);
+		sessionStorage("db",JSON.stringify(db))
 		return db;
 	} catch (err) {
 		console.log(err.stack);
