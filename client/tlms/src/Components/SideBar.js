@@ -26,6 +26,12 @@ export default function SideBar(props){
     async function handle_click_my_students(){
       setisCurrentlyActive(7)
     }
+    async function handle_click_leaveexit_class() {
+      setisCurrentlyActive(8)
+    }
+    async function handle_click_back(){
+      setisCurrentlyActive(9)
+    }
     
 
     //CSS 
@@ -102,7 +108,7 @@ export default function SideBar(props){
             class={buttonStyle.concat(
               isCurrentlyActive == 7 ? " text-blue-400 font-semibold" : ""
             )}
-            onClick={handle_click_create_test}
+            onClick={handle_click_my_students}
           >
             My Students
           </button>
@@ -125,6 +131,26 @@ export default function SideBar(props){
             onClick={handle_click_past_recording}
           >
             Past Recordings
+          </button>
+        </div>
+        <div class={outerButtonDiv}>
+          <button
+            class={buttonStyle.concat(
+              isCurrentlyActive == 8 ? " text-blue-400 font-semibold" : ""
+            )}
+            onClick={handle_click_leaveexit_class}
+          >
+            {props.isTeacher ? "Delete Class" : "Leave Class"}
+          </button>
+        </div>
+        <div class={outerButtonDiv}>
+          <button
+            class={buttonStyle.concat(
+              isCurrentlyActive == 9 ? " text-blue-400 font-semibold" : ""
+            )}
+            onClick={handle_click_back}
+          >
+            {'< ' + 'Back'}
           </button>
         </div>
       </div>
