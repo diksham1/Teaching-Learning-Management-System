@@ -6,33 +6,42 @@ import DashBoard from './Components/Dashboard';
 import Class from './Components/Class';
 import ClassTeacher from "./Components/ClassTeacher"
 import AuthContextProvider from "./Contexts/AuthContext"
+import ClassContextProvider from "./Contexts/ClassContext"
 
 
 function App() {
   return (
     <Router>
-        <Switch>
-          <Route path="/" exact>
-            <AuthContextProvider>
+      <Switch>
+        <Route path="/" exact>
+          <AuthContextProvider>
+            <ClassContextProvider>
               <Login />
-            </AuthContextProvider>
-          </Route>
-          <Route path="/dashboard" exact>
-            <AuthContextProvider>
+            </ClassContextProvider>
+          </AuthContextProvider>
+        </Route>
+        <Route path="/dashboard" exact>
+          <AuthContextProvider>
+            <ClassContextProvider>
               <DashBoard />
-            </AuthContextProvider>
-          </Route>
-          <Route path="/class" exact>
-            <AuthContextProvider>
+            </ClassContextProvider>
+          </AuthContextProvider>
+        </Route>
+        <Route path="/class" exact>
+          <AuthContextProvider>
+            <ClassContextProvider>
               <Class />
-            </AuthContextProvider>
-          </Route>
-          <Route path="/class2" exact>
-            <AuthContextProvider>
+            </ClassContextProvider>
+          </AuthContextProvider>
+        </Route>
+        <Route path="/class2" exact>
+          <AuthContextProvider>
+            <ClassContextProvider>
               <ClassTeacher />
-            </AuthContextProvider>
-          </Route>
-        </Switch>
+            </ClassContextProvider>
+          </AuthContextProvider>
+        </Route>
+      </Switch>
     </Router>
   );
 }
