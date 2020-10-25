@@ -5,7 +5,7 @@ const createInviteCode = require('./createInviteCode')
 const createLiveClassLink = require('./createLiveClassLink')
 const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt')
-const saltRounds = 10;
+const saltRounds = 10; //set to be 10 across all apis for encryption
 
 const errorOccuredResponse = {
 	"status": 500,
@@ -23,14 +23,28 @@ router.get('/',async function(req,res){
 })
 
 /**
-router.get('/scrap',async function(req,res){ //only to be user to delete all test documents
+router.get('/scrap',async function(req,res){ //only to be used to delete all test documents
 	const db = await dbconn()
 	db.collection('User').remove({})
 	res.send("hey")
 })
  */
 
-
+//This accepts login details for verification....
+/**
+ * {
+ * 		"email" : <email>,
+ * 		"password" : <password>,
+ * }
+ * {
+ * 		"statuscode" : *Success or failure*,
+ * 		"_id" : *The User ID of the user for storing as a global variable*,
+ * 		"name" : *The name of the user for storing as a global state*
+ *
+ * }
+ * 
+ * Here email is used as key as it is unique
+ */
 router.post('/login',async (req,res) => {
 	try{
 		const db = await dbconn();
@@ -39,9 +53,9 @@ router.post('/login',async (req,res) => {
 		const queryResponse = await col.findOne({ email: login.email });
 
 		if(queryResponse == null)
-			return res.json(errorOccuredResponse)
+			return res.json(errorOccuredResponse) //if user does not exist
 
-		bcrypt.compare(login.password,queryResponse.password,(err,sm) => {
+		bcrypt.compare(login.password,queryResponse.password,(err,sm) => { //
 			if(err){
 				console.log(err)
 				return res.json(errorOccuredResponse)
@@ -67,6 +81,23 @@ router.post('/login',async (req,res) => {
 	}
 })
 
+/**
+ * This api is responsible to create a new user
+ * 
+ * {
+ * 		"email" : <email>,
+ * 		"name" : <name of the user>,
+ * 		"phone no." : <phone number of the user(optional)>,
+ * 		"password" : <Password of the user>
+ * }
+ * {
+ * 		"statuscode" : <statuscode>,
+ * 		"_id" : *Contains the object id of newly created document*,
+ * 		"result" : <true>
+ * }
+ * 
+ * "schema_ver","courses" added as empty fields
+ */
 router.post('/users',async function(req, res) {
 	try {
 		let exists = false
@@ -79,7 +110,7 @@ router.post('/users',async function(req, res) {
 
 		bcrypt.hash(req.body.password,saltRounds,async (err,hash) => {
 			console.log(hash)
-			user['password'] = hash
+			user['password'] = hash //the password is hashed before storing in database
 
 			exists = (check1)?false:true
 			if(exists)
@@ -92,19 +123,22 @@ router.post('/users',async function(req, res) {
 				"result": true	
 			});
 		})
-
-			
 	} catch(e) {
 		console.log(e);
 		return res.json(errorOccuredResponse)
 	}
 })
 
+
+/**
+ * This API returns the details of a user corresponding to a given userid
+ */
 router.get('/users/:userid',async function(req,res){
 	try{
 		console.log(req.params.userid)
 		const db = await dbconn()
 		const queryResponse = await db.collection('User').findOne({"_id" : ObjectID(req.params.userid)})
+		//search via objectid parameter and return the whole document
 		return res.json(queryResponse)
 	}
 	catch(e){
@@ -120,7 +154,26 @@ router.get('/users/:userid',async function(req,res){
  *  @todo Improve invite code creation algorithm
  */
 
-
+ /**
+  * This api creates a new course 
+  * 
+  * {
+  * 	"creator_id" : <id of the course creator>,
+  * 	"creator_name" : <name of the creator>,
+  * 	"name" : <name of the course>,
+  * 	"course_desc" : <description of the course>
+  * }
+  * 
+  * {
+  * 	"statuscode" : <statuscode>,
+  * 	"course_id" : <object id of newly created document>,
+  * 	"invite_code" : <Invite code for joining the class>,
+  * 	"live_class_link" : <live class link , null  as of now>,
+  * 	"result " : <true>
+  * }
+  * 
+  * The attributes added are invite_code, live_class_link, schema_ver, posts as an empty array
+  */
 router.post('/courses', async function(req, res) {
 	try {
 
@@ -133,7 +186,7 @@ router.post('/courses', async function(req, res) {
 		
 		do {
 			inviteCode = await createInviteCode();
-		} while (await col.findOne({"invite_code": inviteCode}) != null);
+		} while (await col.findOne({"invite_code": inviteCode}) != null); //Ensuring no duplicate invite code
 			
 		liveClassLink = await createLiveClassLink();
 		
@@ -162,11 +215,19 @@ router.post('/courses', async function(req, res) {
  * Get course details corresponding to a course ID
  * @todo Allow user to Input Course IDs 
  */
+/**
+ * This api returns the document with the corresponding courseid from the Course collction
+ * This is to be kept in mind that here and henceforth course_id shall mean invite _code
+ * {
+ * 		Ths whole Course Documents
+ * }
+ */
 router.get('/courses/:courseid', async function (req, res) {
 	try {
 		const db = await dbconn();
 		const col = db.collection('Course');
 		const courseDetails = await col.findOne({"invite_code": req.params.courseid});
+		//invite_code being treated as course id
 		return res.json(courseDetails);
 	} catch (e) {
 		console.log(e);
@@ -175,7 +236,14 @@ router.get('/courses/:courseid', async function (req, res) {
 })
 
 
-//returns all courses of a given creator
+/**
+ * New API addition alert
+ * This api was added to simplifiy database query calls
+ * This api returns all the invite_code of the classes who creator is same as that of a given creator id
+ * {
+ * 		"courses" : [{<invite_code>}]
+ * }
+ */
 router.get('/courses/creator/:creatorid', async function (req, res) {
 	try {
 		const db = await dbconn();
@@ -198,8 +266,9 @@ router.get('/courses/creator/:creatorid', async function (req, res) {
 
 /**
  * Get post IDs of all posts which are assignments for a particular course
+ * filters out the posts for a given course which are also assignment
  */
-//@todo set constraints on db to have unique email id
+//Will look as assignments later
 router.get('/courses/:courseid/assignments', async function (req, res) {
 	try {
 		let assignmentList = []	
@@ -207,14 +276,17 @@ router.get('/courses/:courseid/assignments', async function (req, res) {
 		const col = db.collection('Course');	
 
 		const postIdList = await col.find({
-			"_id" : ObjectID(req.params.courseid),
+			"invite_code" : req.params.courseid,
 			"posts": {"$exists": true}
 		})
 		.project({"posts":1, "_id":0})
 		.toArray()
 		.then((postIdDocument) => {
+			console.log(postIdDocument)
 			return postIdDocument[0]["posts"].map((postId) => ObjectID(postId));
 		})
+
+		console.log(postIdList)
 		
 		const postsWithAssignmentIDList = await db.collection('Post').find({
 			"_id": {
@@ -237,6 +309,7 @@ router.get('/courses/:courseid/assignments', async function (req, res) {
 	}
 })
 
+//would look at it later
 router.post('/courses/:courseid/assignments', async function (req, res) {
 	const db = await dbconn();
 	const col = db.collection('Assignment');
@@ -268,6 +341,7 @@ router.post('/courses/:courseid/assignments', async function (req, res) {
 	});
 })
 
+//would look at it later
 router.get('/courses/:courseid/assignments/:assignmentid', async function(req, res) {
 	const db = await dbconn();
 	const assignmentDetails = await db.collection('Assignment').findOne({
@@ -276,8 +350,13 @@ router.get('/courses/:courseid/assignments/:assignmentid', async function(req, r
 	return res.json(assignmentDetails);
 })
 
+/**
+ * Creates a new post and add it to a given course
+ * courseId is same as invite_code
+ */
 router.post('/courses/:courseid/posts', async function(req, res) {
 	const db = await dbconn();
+	req.body['comments'] = []
 	const insertResponse = await db.collection('Post').insertOne(req.body);
 	const insertedId = insertResponse["insertedId"]
 	db.collection('Course').update(
@@ -299,7 +378,18 @@ router.post('/courses/:courseid/posts', async function(req, res) {
 	})
 });
 
-
+/**
+ * This api is to be used to add a student to a given course if it exixts
+ * {
+ * 		"userID" : <the object id of the User documents>, 
+ * }
+ * {
+ * 		"statuscode" : <statuscode>,
+ * 		"result" : <true>
+ * }
+ * 
+ * Here also the courseis same as invite_code
+ */
 router.post('/courses/:courseid/students', async function(req, res) {
 	try{
 		const userId = req.body["userID"]
@@ -334,6 +424,10 @@ router.post('/courses/:courseid/students', async function(req, res) {
 	}
 });
 
+/**
+ * get all the students enrolled in a given course
+ * courseid is to be treated as invite_code
+ */
 router.get('/courses/:courseid/students', async function(req, res) {
 	try{
 		const courseId = req.params.courseid;
@@ -357,6 +451,9 @@ router.get('/courses/:courseid/students', async function(req, res) {
 
 /**
  * @todo /courses/:courseid/students/:studentid is practically useless
+ * This api endpoint is useless because we can get the student details from 
+ * get /v1/users/:userid
+ * and student is not existentially dependent on course
  */
 router.get('/courses/:courseid/students/:studentid', async function (req, res) {
 	const studentId = req.params.studentid;
@@ -367,7 +464,10 @@ router.get('/courses/:courseid/students/:studentid', async function (req, res) {
 	return res.json(userDetails);
 });
 
-//@todo comment every API in JSDoc format
+/**
+ * Returns all comments correspnding to a post...
+ * courseid same as invite_code
+ */
 router.get('/courses/:courseid/posts/:postid/comments', async function (req, res) {
 	const db = await dbconn();
 	await db.collection('Post').update(
@@ -381,22 +481,34 @@ router.get('/courses/:courseid/posts/:postid/comments', async function (req, res
 	return res.json({"statuscode": 201, "result": true})
 });
 
+/**
+ * Returns all post corresponding to a course
+ * courseid is to be treated as invite_code
+ */
 router.get('/courses/:courseid/posts', async function (req, res) {
-	const courseId = req.params.courseid;
-	const db = await dbconn();
-	const postIDs = await db.collection('Course').find({
-		'_id': ObjectID(courseId)
-	})
-	.project({
-		"posts": 1,
-		"_id": 0
-	})
-	.limit(1)
-	.toArray();
+	try{
+		const courseId = req.params.courseid;
+		const db = await dbconn();
+		const postIDs = await db.collection('Course').find({
+			'invite_code': courseId
+		})
+		.project({
+			"posts": 1,
+			"_id": 0
+		})
+		.limit(1)
+		.toArray();
 
-	return res.json({"posts": postIDs[0]["posts"]})
+		return res.json({"posts": postIDs[0]["posts"]})
+	}catch(e){
+		console.log(e)
+		return res.json(errorOccuredResponse)
+	}
 })
 
+/**
+ * Retrieve a particula post corresponding to a particualr post id
+ */
 router.get('/courses/:courseid/posts/:postid', async function(req, res) {
 	const db = await dbconn();
 	const postId = req.params.postid;
