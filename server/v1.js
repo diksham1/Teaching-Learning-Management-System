@@ -282,7 +282,7 @@ router.post('/courses/:courseid/posts', async function(req, res) {
 	const insertedId = insertResponse["insertedId"]
 	db.collection('Course').update(
 		{
-			"_id": ObjectID(req.params.courseid),
+			"invite_code": req.params.courseid,
 		},
 		{
 			"$push":	
@@ -355,6 +355,9 @@ router.get('/courses/:courseid/students', async function(req, res) {
 	}
 });
 
+/**
+ * @todo /courses/:courseid/students/:studentid is practically useless
+ */
 router.get('/courses/:courseid/students/:studentid', async function (req, res) {
 	const studentId = req.params.studentid;
 	const db = await dbconn();
