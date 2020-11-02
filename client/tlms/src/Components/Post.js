@@ -1,6 +1,11 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import Comment from './Comment.js'
 import FilePanel from './FilePanel'
+import axios from 'axios'
+import {ClassContext} from '../Contexts/ClassContext'
+import {AuthContext} from '../Contexts/AuthContext'
+import ROUTES from '../routes'
+
 
 export default function Post(props){
   const [showComments, setShowComments] = useState(false);
@@ -8,10 +13,45 @@ export default function Post(props){
   const [isDone, setisDone] = useState(false);
   const [viewSubmissions, setviewSubmissions] = useState(false);
 
-  function toggleComments(event) {
+  const [apiCallResult,setapiCallResult] = useState(null)
+  const [comments,setComments] = useState(null)
+
+  const classContext = useContext(ClassContext)
+  const authContext = useContext(AuthContext)
+  
+  useEffect(() => {
+    async function f(){
+        const res = await axios.get(ROUTES.api.get.courses + "/" + String(classContext.classCode_state) + "/posts/" + String(props.post_id))
+        setapiCallResult(res.data)
+        setComments(res.data.comments)
+    }
+    f()
+  },[])
+
+  async function toggleComments(event) {
     console.log(event.target.classList.value);
     const s = Array.from(event.target.classList);
     if (!s.includes("button")) setShowComments((p) => !p);
+  }
+
+  async function post_comment(){
+    const com = document.getElementById(String(props.post_id)).value
+    const res = await axios.post(
+      ROUTES.api.get.courses +
+        "/" +
+        String(classContext.classCode_state) +
+        "/posts/" +
+        String(props.post_id) +
+        "/comments",
+        {
+          "commentator_id" : authContext.id_state,
+          "commentator_name" : authContext.name_state,
+          "comment" : com
+        }
+    );
+    //console.log(res)
+    document.getElementById(String(props.post_id)).value = "";
+    document.getElementById(String(props.post_id)).placeholder = "Your Comment Here";
   }
 
   //{isUploaded ? "View Submission" : "Upload Assignment"}
@@ -43,7 +83,7 @@ export default function Post(props){
   return (
     <div class={outerdiv}>
       <div class={mainpost} onClick={toggleComments}>
-        <div class={imposter}>{props.postername}</div>
+      <div class={imposter}>{(apiCallResult == null)? "" : apiCallResult.creator_id}</div>
         <div
           class={css4}
           style={{
@@ -63,8 +103,12 @@ export default function Post(props){
         </div>
       </div>
       <div class={css6} onClick={toggleComments}>
-        <div class={css7}>{props.title}</div>
-        <div class={css8}>{props.text}</div>
+        <div class={css7}>
+          {apiCallResult == null ? "" : apiCallResult.post_title}
+        </div>
+        <div class={css8}>
+          {apiCallResult == null ? "" : apiCallResult.post_text}
+        </div>
         <div
           class={css9}
           style={{
@@ -140,9 +184,19 @@ export default function Post(props){
           display: showComments ? "" : "none",
         }}
       >
-        <Comment name="Person1" comment="Lorem ipsum dolor sit amet" />
-        <Comment name="Person2" comment="Lorem ipsum dolor sit amet" />
-        <Comment name="Person3" comment="Lorem ipsum dolor sit amet" />
+        {comments == null
+          ? ""
+          : comments.map((comment) => (
+              <Comment
+                name = {comment.commentator_name.indexOf(" ") == -1
+              ? comment.commentator_name
+              : comment.commentator_name.substring(
+                  0,
+                  comment.commentator_name.indexOf(" ")
+                )}
+                comment = {comment.comment}
+              />
+            ))}
       </div>
       <div
         class={cssbored1}
@@ -150,8 +204,14 @@ export default function Post(props){
           display: showComments ? "" : "none",
         }}
       >
-        <input class={cssbored2} placeholder="Your Comment here"></input>
-        <button class={cssbored3}>Post</button>
+        <input
+          class={cssbored2}
+          placeholder="Your Comment here"
+          id={String(props.post_id)}
+        ></input>
+        <button class={cssbored3} onClick={post_comment}>
+          Post
+        </button>
       </div>
       <div class={cssbored4}>
         <button
