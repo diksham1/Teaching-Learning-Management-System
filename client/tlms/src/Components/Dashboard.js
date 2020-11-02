@@ -21,15 +21,14 @@ export default function DashBoard(){
               ROUTES.api.get.creatorcourses + "/" + String(authContext.id_state)
             );
             setcourse_array(
-              res.data.courses.reverse().map((p) => {
+              res.data.courses.map((p) => {
                 return p.invite_code;
               })
             );
           }
           else{
             const res = await axios.get(ROUTES.api.get.users + "/" + String(authContext.id_state));
-            setcourse_array(res.data.courses.reverse())
-            console.log(course_array);
+            setcourse_array(res.data.courses)
           }
       }
       f();

@@ -15,11 +15,8 @@ export default function ClassCard(props){
 
     useEffect(()=>{
       async function f(){
-          console.log(ROUTES.api.get.courses + "/" + String(props.classCode));
           const res = await axios.get(ROUTES.api.get.courses + "/" + String(props.classCode))
           setapicallresult(res.data)
-          console.log(res)
-          console.log(apicallresult)
       }
       f();
     },[])
