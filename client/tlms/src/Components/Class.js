@@ -1,4 +1,4 @@
-import React,{useContext,useEffect} from 'react'
+import React,{useContext,useEffect, useState} from 'react'
 import SideBar from './SideBar.js'
 import Header from './Header'
 import Post from './Post'
@@ -7,6 +7,7 @@ import Footer from './Footer'
 import Mypost from './Mypost'
 import {ClassContext} from '../Contexts/ClassContext'
 import {AuthContext} from '../Contexts/AuthContext'
+import ROUTES from '../routes.js'
 import axios from 'axios'
 
 
@@ -14,6 +15,16 @@ export default function Class(){
     const classContext = useContext(ClassContext)
     const authContext = useContext(AuthContext)
 
+    const [posts_array, setposts_array] = useState(null)
+
+    useEffect(() => {
+        async function f(){
+          const res = await axios.get(ROUTES.api.get.courses + "/" + String(classContext.classCode_state) + "/posts")
+          setposts_array(res.data.posts)
+          console.log(res.data.posts)
+        }
+        f()
+    },[])
     return (
       <div>
         <Header
@@ -33,35 +44,14 @@ export default function Class(){
           </div>
           <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2">
             <Mypost />
-            <Post
-              postername="World"
-              hasAssignment="true"
-              dueDate="Sept 23"
-              title="Lorem Ipsum"
-              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            />
-            <Post
-              postername="World"
-              title="Lorem Ipsum"
-              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            />
-            <Post
-              postername="World"
-              title="Lorem Ipsum"
-              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            />
-            <Post
-              postername="World"
-              title="Lorem Ipsum"
-              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-              hasAssignment="true"
-              dueDate="Oct 5"
-            />
-            <Post
-              postername="World"
-              title="Lorem Ipsum"
-              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            />
+            {(posts_array == null)
+              ? ""
+              : posts_array.map((post_id) => (
+                  <Post
+                    key={post_id}
+                    post_id = {post_id}
+                  />
+                ))}
           </div>
           <div class="w-3/12 lg:block hidden">
             <TaskSideBar />
