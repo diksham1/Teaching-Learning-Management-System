@@ -1,11 +1,28 @@
 const express = require('express')
 const router = express.Router()
-const dbconn = require('./dbconn')
 const createInviteCode = require('./createInviteCode')
 const createLiveClassLink = require('./createLiveClassLink')
 const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt')
 const saltRounds = 10; //set to be 10 across all apis for encryption
+
+require("dotenv").config();
+const MongoClient = require("mongodb").MongoClient;
+const username = process.env.USER_NAME;
+const password = process.env.PASS;
+
+const uri = `mongodb+srv://${username}:${password}@tlms.1so97.mongodb.net/tlms?retryWrites=true&w=majority`;
+
+const dbName = "tlms";
+
+let db = null
+
+try {
+  const client = new MongoClient(uri, { useNewUrlParser: true });
+  client.connect().then(() => {db = client.db(dbName)});
+} catch (err) {
+  console.log(err.stack);
+}
 
 const errorOccuredResponse = {
 	"status": 500,
@@ -47,7 +64,7 @@ router.get('/scrap',async function(req,res){ //only to be used to delete all tes
  */
 router.post('/login',async (req,res) => {
 	try{
-		const db = await dbconn();
+		//const db = await dbconn();
     	const login = req.body;
     	const col = db.collection("User");
 		const queryResponse = await col.findOne({ email: login.email });
@@ -101,7 +118,7 @@ router.post('/login',async (req,res) => {
 router.post('/users',async function(req, res) {
 	try {
 		let exists = false
-		const db = await dbconn();
+		//const db = await dbconn();
 		const user = req.body;
 		user["schema_ver"] = 1;
 		user['courses'] = []
@@ -136,7 +153,7 @@ router.post('/users',async function(req, res) {
 router.get('/users/:userid',async function(req,res){
 	try{
 		console.log(req.params.userid)
-		const db = await dbconn()
+		//const db = await dbconn()
 		const queryResponse = await db.collection('User').findOne({"_id" : ObjectID(req.params.userid)})
 		//search via objectid parameter and return the whole document
 		return res.json(queryResponse)
@@ -179,7 +196,7 @@ router.post('/courses', async function(req, res) {
 
 		if(!req.body.name)
 			return res.json(errorOccuredResponse)
-		const db = await dbconn();
+		//const db = await dbconn();
 		const col = db.collection('Course')
 		let inviteCode = null;
 		let liveClassLink = null;
@@ -224,7 +241,7 @@ router.post('/courses', async function(req, res) {
  */
 router.get('/courses/:courseid', async function (req, res) {
 	try {
-		const db = await dbconn();
+		//const db = await dbconn();
 		const col = db.collection('Course');
 		const courseDetails = await col.findOne({"invite_code": req.params.courseid});
 		//invite_code being treated as course id
@@ -246,7 +263,7 @@ router.get('/courses/:courseid', async function (req, res) {
  */
 router.get('/courses/creator/:creatorid', async function (req, res) {
 	try {
-		const db = await dbconn();
+		//const db = await dbconn();
 		const col = db.collection('Course');
 		const courseDetails = await col.find({"creator_id": req.params.creatorid})
 		.project(
@@ -272,7 +289,7 @@ router.get('/courses/creator/:creatorid', async function (req, res) {
 router.get('/courses/:courseid/assignments', async function (req, res) {
 	try {
 		let assignmentList = []	
-		const db = await dbconn();
+		//const db = await dbconn();
 		const col = db.collection('Course');	
 
 		const postIdList = await col.find({
@@ -311,7 +328,7 @@ router.get('/courses/:courseid/assignments', async function (req, res) {
 
 //would look at it later
 router.post('/courses/:courseid/assignments', async function (req, res) {
-	const db = await dbconn();
+	//const db = await dbconn();
 	const col = db.collection('Assignment');
 	let assignmentData = req.body;
 
@@ -343,7 +360,7 @@ router.post('/courses/:courseid/assignments', async function (req, res) {
 
 //would look at it later
 router.get('/courses/:courseid/assignments/:assignmentid', async function(req, res) {
-	const db = await dbconn();
+	//const db = await dbconn();
 	const assignmentDetails = await db.collection('Assignment').findOne({
 		"_id": ObjectID(req.params.assignmentid)
 	})
@@ -355,7 +372,7 @@ router.get('/courses/:courseid/assignments/:assignmentid', async function(req, r
  * courseId is same as invite_code
  */
 router.post('/courses/:courseid/posts', async function(req, res) {
-	const db = await dbconn();
+	//const db = await dbconn();
 	req.body['comments'] = []
 	const insertResponse = await db.collection('Post').insertOne(req.body);
 	const insertedId = insertResponse["insertedId"]
@@ -395,7 +412,7 @@ router.post('/courses/:courseid/students', async function(req, res) {
 		const userId = req.body["userID"]
 		const inviteCode = req.params.courseid;
 
-		const db = await dbconn();
+		//const db = await dbconn();
 
 		const queryResponse = await db.collection('Course').findOne({invite_code : inviteCode})
 
@@ -431,7 +448,7 @@ router.post('/courses/:courseid/students', async function(req, res) {
 router.get('/courses/:courseid/students', async function(req, res) {
 	try{
 		const courseId = req.params.courseid;
-		const db = await dbconn();
+		//const db = await dbconn();
 		const userList = await db.collection('User').find({
 			"courses": courseId
 		})	
@@ -457,7 +474,7 @@ router.get('/courses/:courseid/students', async function(req, res) {
  */
 router.get('/courses/:courseid/students/:studentid', async function (req, res) {
 	const studentId = req.params.studentid;
-	const db = await dbconn();
+	//const db = await dbconn();
 	const userDetails = await db.collection('User').findOne({
 		'_id': ObjectID(studentId)
 	});
@@ -465,11 +482,11 @@ router.get('/courses/:courseid/students/:studentid', async function (req, res) {
 });
 
 /**
- * Returns all comments correspnding to a post...
+ * Creates a new comment...
  * courseid same as invite_code
  */
-router.get('/courses/:courseid/posts/:postid/comments', async function (req, res) {
-	const db = await dbconn();
+router.post('/courses/:courseid/posts/:postid/comments', async function (req, res) {
+	//const db = await dbconn();
 	await db.collection('Post').update(
 		{
 			"_id": ObjectID(req.params.postid)
@@ -488,7 +505,7 @@ router.get('/courses/:courseid/posts/:postid/comments', async function (req, res
 router.get('/courses/:courseid/posts', async function (req, res) {
 	try{
 		const courseId = req.params.courseid;
-		const db = await dbconn();
+		//const db = await dbconn();
 		const postIDs = await db.collection('Course').find({
 			'invite_code': courseId
 		})
@@ -507,10 +524,10 @@ router.get('/courses/:courseid/posts', async function (req, res) {
 })
 
 /**
- * Retrieve a particula post corresponding to a particualr post id
+ * Retrieve a particula post corresponding to a particualr post id 
  */
 router.get('/courses/:courseid/posts/:postid', async function(req, res) {
-	const db = await dbconn();
+	//const db = await dbconn();
 	const postId = req.params.postid;
 	const postDetails = await db.collection('Post').findOne({
 		"_id": ObjectID(postId)
