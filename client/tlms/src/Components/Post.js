@@ -19,12 +19,19 @@ export default function Post(props){
   const classContext = useContext(ClassContext)
   const authContext = useContext(AuthContext)
   
+  async function f() {
+    const res = await axios.get(
+      ROUTES.api.get.courses +
+        "/" +
+        String(classContext.classCode_state) +
+        "/posts/" +
+        String(props.post_id)
+    );
+    setapiCallResult(res.data);
+    setComments(res.data.comments);
+  }
+
   useEffect(() => {
-    async function f(){
-        const res = await axios.get(ROUTES.api.get.courses + "/" + String(classContext.classCode_state) + "/posts/" + String(props.post_id))
-        setapiCallResult(res.data)
-        setComments(res.data.comments)
-    }
     f()
   },[])
 
@@ -52,6 +59,7 @@ export default function Post(props){
     //console.log(res)
     document.getElementById(String(props.post_id)).value = "";
     document.getElementById(String(props.post_id)).placeholder = "Your Comment Here";
+    f()
   }
 
   //{isUploaded ? "View Submission" : "Upload Assignment"}
