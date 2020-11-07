@@ -4,6 +4,7 @@ import ROUTES from '../routes'
 import {Link} from 'react-router-dom'
 import {AuthContext} from '../Contexts/AuthContext'
 import {ClassContext} from "../Contexts/ClassContext"
+const parse = require('html-react-parser')
 
 
 export default function ClassCard(props){
@@ -67,7 +68,7 @@ export default function ClassCard(props){
                 : "Your Class"}
             </div>
             <div style={{ display: isHovered ? "block" : "none" }}>
-              <i>{apicallresult == null ? "" : apicallresult.course_desc}</i>
+              <i>{apicallresult == null ? "" : parse(apicallresult.course_desc)}</i>
             </div>
           </div>
         </button>
