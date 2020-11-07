@@ -21,6 +21,7 @@ export default function CreateClassOverlay(props){
         props.f(false)
         document.getElementById("classname_inp").value = "";
         document.getElementById("class_desc_inp").innerHTML = "";
+        props.getClassesList();
 
     }
 
@@ -54,6 +55,9 @@ export default function CreateClassOverlay(props){
             class={formInputDesc}
             id = "class_desc_inp"
             contentEditable = "true"
+            style = {{
+              display : "inline-block"
+            }}
           ></div>
         </div>
         <div class= {buttonConatiner}>
@@ -61,6 +65,7 @@ export default function CreateClassOverlay(props){
             type="button"
             class= {buttoncss}
             onClick = {handle_press}
+            onEnter = {handle_press}
           >
             Create Class
           </button>

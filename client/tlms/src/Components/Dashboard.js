@@ -14,24 +14,26 @@ export default function DashBoard(){
 
     const [course_array,setcourse_array] = useState(null)
 
-    useEffect(() => {
-      async function f(){
-          if(authContext.isEducator_state){
-            const res = await axios.get(
-              ROUTES.api.get.creatorcourses + "/" + String(authContext.id_state)
-            );
-            setcourse_array(
-              res.data.courses.map((p) => {
-                return p.invite_code;
-              })
-            );
-          }
-          else{
-            const res = await axios.get(ROUTES.api.get.users + "/" + String(authContext.id_state));
-            setcourse_array(res.data.courses)
-          }
+    async function getClassesList() {
+      if (authContext.isEducator_state) {
+        const res = await axios.get(
+          ROUTES.api.get.creatorcourses + "/" + String(authContext.id_state)
+        );
+        setcourse_array(
+          res.data.courses.map((p) => {
+            return p.invite_code;
+          })
+        );
+      } else {
+        const res = await axios.get(
+          ROUTES.api.get.users + "/" + String(authContext.id_state)
+        );
+        setcourse_array(res.data.courses);
       }
-      f();
+    }
+
+    useEffect(() => {
+      getClassesList();
     },[])
   
     return (
@@ -46,11 +48,12 @@ export default function DashBoard(){
                 )
           }
           isStudent = {!authContext.isEducator_state}
+          getClassesList = {getClassesList}
 
         />
         <div class="flex flex-row">
           <div class="lg:w-9/12 w-full flex flex-col space-y-4 px-16 py-2 ">
-            {(course_array == null)? "" : course_array.map((course) => (
+            {(course_array == null)? "" : course_array.reverse().map((course) => (
               <ClassCard key={course} classCode={course} isStudent = {!authContext.isEducator_state}/>
               ))
             }

@@ -59,7 +59,7 @@ export default function Headers(props) {
         onClick={handle_class_join_overlay}
       >
         <div class={joinoverlay}>
-          <JoinClassOverlay f={setshowJoinClassOverlay} />
+          <JoinClassOverlay f={setshowJoinClassOverlay} getClassesList = {props.getClassesList}/>
         </div>
       </div>
       <div class={paneldiv}>
@@ -107,7 +107,10 @@ export default function Headers(props) {
           onClick={handle_create_class_overlay}
         >
           <div class={createoverlay}>
-            <CreateClassOverlay f={setshowCreateClassOverlay} />
+            <CreateClassOverlay
+              f={setshowCreateClassOverlay}
+              getClassesList={props.getClassesList}
+            />
           </div>
         </div>
         <div class={paneldiv}>

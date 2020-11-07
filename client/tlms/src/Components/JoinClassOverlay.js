@@ -15,6 +15,7 @@ export default function JoinClassOverlay(props){
       console.log(res)
       props.f(false)
       document.getElementById("cid").value = ""
+      props.getClassesList();
     }
 
 
@@ -44,6 +45,7 @@ export default function JoinClassOverlay(props){
             type="button"
             class={buttonsubmit}
             onClick = {handle_press}
+            onEnter = {handle_press}
           >
             Join Class
           </button>
