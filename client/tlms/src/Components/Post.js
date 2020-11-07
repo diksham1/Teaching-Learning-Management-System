@@ -5,7 +5,7 @@ import axios from 'axios'
 import {ClassContext} from '../Contexts/ClassContext'
 import {AuthContext} from '../Contexts/AuthContext'
 import ROUTES from '../routes'
-
+const parse = require("html-react-parser");
 
 export default function Post(props){
   const [showComments, setShowComments] = useState(false);
@@ -104,10 +104,10 @@ export default function Post(props){
       </div>
       <div class={css6} onClick={toggleComments}>
         <div class={css7}>
-          {apiCallResult == null ? "" : apiCallResult.post_title}
+          {apiCallResult == null ? "" : parse(apiCallResult.post_title)}
         </div>
         <div class={css8}>
-          {apiCallResult == null ? "" : apiCallResult.post_text}
+          {apiCallResult == null ? "" : parse(apiCallResult.post_text)}
         </div>
         <div
           class={css9}

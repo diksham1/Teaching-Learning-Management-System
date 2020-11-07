@@ -5,6 +5,7 @@ import {ClassContext} from "../Contexts/ClassContext.js"
 import ROUTES from '../routes'
 
 
+
 export default function Mypost(props){
 
   const authContext = useContext(AuthContext)
@@ -34,6 +35,7 @@ export default function Mypost(props){
       document.getElementById("myposttitle").innerHTML = "Post Title Here";
     }
   }
+
 
   async function handle_create_post(){
     const ptitle = document.getElementById('myposttitle').innerHTML
@@ -78,14 +80,25 @@ export default function Mypost(props){
           <div
             class={posttitle}
             id="myposttitle"
+            style={{
+              display: "inline-block"
+            }}
             contentEditable="true"
             onFocus={mypost_title_focus}
             onBlur={mypost_title_blur}
+            onKeyDown={(evt) => {
+              if (evt.keyCode === 13) {
+                evt.preventDefault();
+              }
+            }}
           >
             Post Title Here
           </div>
           <div
             class={postbody}
+            style = {{
+              display : "inline-block"
+            }}
             id="myposttext"
             contentEditable="true"
             onFocus={mypost_focus}
