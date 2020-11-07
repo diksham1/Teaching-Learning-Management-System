@@ -5,7 +5,6 @@ import {ClassContext} from "../Contexts/ClassContext.js"
 import ROUTES from '../routes'
 
 
-
 export default function Mypost(props){
 
   const authContext = useContext(AuthContext)
@@ -51,6 +50,7 @@ export default function Mypost(props){
     console.log(response)
     document.getElementById("myposttitle").innerHTML = "Post Title Here";
     document.getElementById("myposttext").innerHTML = "Write a Post";
+    props.getPostList()
 
   }
 

@@ -17,14 +17,21 @@ export default function Class(){
 
     const [posts_array, setposts_array] = useState(null)
 
+    async function getPostList() {
+      const res = await axios.get(
+        ROUTES.api.get.courses +
+          "/" +
+          String(classContext.classCode_state) +
+          "/posts"
+      );
+      setposts_array(res.data.posts);
+      console.log(res.data.posts);
+    }
+
     useEffect(() => {
-        async function f(){
-          const res = await axios.get(ROUTES.api.get.courses + "/" + String(classContext.classCode_state) + "/posts")
-          setposts_array(res.data.posts)
-          console.log(res.data.posts)
-        }
-        f()
+        getPostList();
     },[])
+
     return (
       <div>
         <Header
@@ -43,10 +50,10 @@ export default function Class(){
             <SideBar classname={classContext.className_state} />
           </div>
           <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2">
-            <Mypost />
+            <Mypost getPostList = {getPostList}/>
             {(posts_array == null)
               ? ""
-              : posts_array.map((post_id) => (
+              : posts_array.reverse().map((post_id) => (
                   <Post
                     key={post_id}
                     post_id = {post_id}
