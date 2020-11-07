@@ -32,8 +32,13 @@ export default function Class(){
         getPostList();
     },[])
 
+    useEffect(() => {
+      getPostList();
+    }, [classContext.classCode_state]);
+
     return (
       <div>
+        <div style = {{display : "none"}}>{classContext.classCode_state}</div>
         <Header
           name={
             authContext.name_state.indexOf(" ") == -1

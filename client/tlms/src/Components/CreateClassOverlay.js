@@ -1,11 +1,13 @@
 import React,{useContext} from 'react'
 import {AuthContext} from '../Contexts/AuthContext'
+import {ClassContext} from '../Contexts/ClassContext'
 import axios from 'axios'
 import ROUTES from '../routes'
 
 export default function CreateClassOverlay(props){
 
     const authContext = useContext(AuthContext)
+    const classContext = useContext(ClassContext)
 
     async function handle_press(){
       const p1 = document.getElementById('classname_inp').value
@@ -17,11 +19,16 @@ export default function CreateClassOverlay(props){
           "name" : p1,
           "course_desc" : p2
         })
-        console.log(res)
         props.f(false)
         document.getElementById("classname_inp").value = "";
         document.getElementById("class_desc_inp").innerHTML = "";
-        props.getClassesList();
+        if (window.location.pathname == "/dashboard") 
+          props.getClassesList();
+        if(res.data.result){
+            classContext.setclassName_state(p1)
+            classContext.setclassCode_state(res.data.invite_code)
+            classContext.setcreator_name_state(authContext.name_state)
+        }
 
     }
 

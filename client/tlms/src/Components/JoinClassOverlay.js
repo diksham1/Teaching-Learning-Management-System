@@ -1,11 +1,13 @@
 import React,{useContext} from 'react'
 import axios from 'axios'
 import {AuthContext} from '../Contexts/AuthContext'
+import {ClassContext} from '../Contexts/ClassContext'
 import ROUTES from '../routes'
 
 export default function JoinClassOverlay(props){
 
     const authContext = useContext(AuthContext)
+    const classContext = useContext(ClassContext)
 
     async function handle_press(){
       const cid = document.getElementById('cid').value
@@ -15,7 +17,14 @@ export default function JoinClassOverlay(props){
       console.log(res)
       props.f(false)
       document.getElementById("cid").value = ""
-      props.getClassesList();
+      if(window.location.pathname == "/dashboard")
+        props.getClassesList();
+      if(res.data.result){
+        const class_res = await axios.get(ROUTES.api.get.courses + "/" + cid)
+        classContext.setclassName_state(class_res.data.name)
+        classContext.setclassCode_state(class_res.data.invite_code)
+        classContext.setcreator_name_state(class_res.data.creator_name)
+      }
     }
 
 
