@@ -43,20 +43,21 @@ export default function Class(){
                   authContext.name_state.indexOf(" ")
                 )
           }
-          isStudent="true"
+          isStudent={!authContext.isEducator_state}
         />
         <div class="flex flex-row">
           <div class="mx-2 lg:w-2/12 w-3/12">
             <SideBar classname={classContext.className_state} />
           </div>
           <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2">
-            <Mypost getPostList = {getPostList}/>
+            <Mypost getPostList = {getPostList} isTeacher = {authContext.isEducator_state}/>
             {(posts_array == null)
               ? ""
               : posts_array.reverse().map((post_id) => (
                   <Post
                     key={post_id}
                     post_id = {post_id}
+                    isTeacher = {authContext.isEducator_state}
                   />
                 ))}
           </div>

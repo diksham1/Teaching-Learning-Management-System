@@ -36,7 +36,7 @@ export default function ClassCard(props){
     
     return (
       <Link
-        to={authContext.isEducator_state ? "/class2" : "class"}
+        to="/class"
         class="border-2 border-gray-400 post text-left shadow-xl hover:shadow-2xl focus:shadow-none"
       >
         <button
