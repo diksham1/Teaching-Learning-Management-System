@@ -123,34 +123,6 @@ export default function Post(props){
             display: props.hasAssignment ? "" : "none",
           }}
         >
-          <div
-            class="button"
-            style={{
-              display: isUploaded ? "" : "none",
-            }}
-          >
-            <button class={css12}>
-              <FilePanel
-                name="Ice"
-                fileurl="/Sample.pdf"
-                filename="Sample.pdf"
-              />
-            </button>
-            <button class={css12}>
-              <FilePanel
-                name="Ice"
-                fileurl="/Sample.pdf"
-                filename="Sample.pdf"
-              />
-            </button>
-            <button class={css12}>
-              <FilePanel
-                name="Ice"
-                fileurl="/Sample.pdf"
-                filename="Sample.pdf"
-              />
-            </button>
-          </div>
 
           <input
             class={css11}
@@ -214,6 +186,9 @@ export default function Post(props){
       >
         <input
           class={cssbored2}
+          style = {{
+            display : "inline-block"
+          }}
           placeholder="Your Comment here"
           id={String(props.post_id)}
         ></input>

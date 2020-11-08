@@ -52,7 +52,7 @@ export default function Class(){
         />
         <div class="flex flex-row">
           <div class="mx-2 lg:w-2/12 w-3/12">
-            <SideBar classname={classContext.className_state} />
+            <SideBar classname={classContext.className_state} isTeacher = {authContext.isEducator_state}/>
           </div>
           <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2">
             <Mypost getPostList = {getPostList} isTeacher = {authContext.isEducator_state}/>
