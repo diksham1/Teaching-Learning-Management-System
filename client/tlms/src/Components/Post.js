@@ -14,6 +14,7 @@ export default function Post(props){
   const [viewSubmissions, setviewSubmissions] = useState(false);
 
   const [apiCallResult,setapiCallResult] = useState(null)
+  const [creatorname,setcreatorname] = useState(null)
   const [comments,setComments] = useState(null)
 
   const classContext = useContext(ClassContext)
@@ -27,6 +28,8 @@ export default function Post(props){
         "/posts/" +
         String(props.post_id)
     );
+    const res2 = await axios.get(ROUTES.api.get.users + "/" + res.data.creator_id)
+    setcreatorname(res2.data.name)
     setapiCallResult(res.data);
     setComments(res.data.comments);
   }
@@ -91,7 +94,7 @@ export default function Post(props){
   return (
     <div class={outerdiv}>
       <div class={mainpost} onClick={toggleComments}>
-      <div class={imposter}>{(apiCallResult == null)? "" : apiCallResult.creator_id}</div>
+      <div class={imposter}>{(creatorname == null)? "" : creatorname}</div>
         <div
           class={css4}
           style={{
