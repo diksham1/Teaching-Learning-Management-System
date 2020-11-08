@@ -1,10 +1,11 @@
 import React from 'react'
+const parse = require('html-react-parser')
 
 export default function Comment(props){
 
     const outerDiv = "w-full flex flex-row space-x-1 my-1"
-    const commentname = "w-3/12 p-2 text-center bg-gray-500 text-xl rounded-lg"
-    const commenttext = "w-9/12 p-2 bg-gray-200 text-md"
+    const commentname = "w-2/12 p-1 text-center bg-gray-500 text-xl rounded-lg"
+    const commenttext = "w-10/12 pl-2 p-1 bg-gray-200 text-lg"
 
     return(
         <div class = {outerDiv}>
@@ -12,7 +13,7 @@ export default function Comment(props){
                 {props.name}
             </div>
             <div class = {commenttext}>
-                {props.comment}
+                {parse(props.comment)}
             </div>
         </div>
     )

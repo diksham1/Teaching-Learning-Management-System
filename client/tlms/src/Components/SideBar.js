@@ -100,9 +100,6 @@ export default function SideBar(props){
         </div>
         <div
           class={outerButtonDiv}
-          style={{
-            display: props.isTeacher ? "" : "none",
-          }}
         >
           <button
             class={buttonStyle.concat(
@@ -110,7 +107,7 @@ export default function SideBar(props){
             )}
             onClick={handle_click_my_students}
           >
-            My Students
+            {props.isTeacher?"My Students":"My Classmates"}
           </button>
         </div>
         <div class={outerButtonDiv}>

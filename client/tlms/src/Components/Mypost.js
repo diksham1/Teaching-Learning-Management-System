@@ -118,7 +118,6 @@ export default function Mypost(props){
             </button>
             <input
               type="date"
-              defaultValue = "1999-10-27"
               class={inputcss1}
               style={{
                 display: isAssignment ? "" : "none",
