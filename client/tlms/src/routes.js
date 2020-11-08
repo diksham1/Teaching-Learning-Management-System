@@ -19,7 +19,10 @@ const ROUTES = {
             'users' : base + '/v1/users',
             'courses' : base + '/v1/courses',
             'creatorcourses' : base + '/v1/courses/creator'
-        }
+        },
+				'del' : {
+						'posts' : base + '/v1/courses/:courseid/posts/:postid'
+				}
     }
 }
 

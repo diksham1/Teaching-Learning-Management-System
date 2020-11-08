@@ -28,21 +28,37 @@ export default function Post(props){
         "/posts/" +
         String(props.post_id)
     );
+		console.log("res", res);
     const res2 = await axios.get(ROUTES.api.get.users + "/" + res.data.creator_id)
     setcreatorname(res2.data.name)
     setapiCallResult(res.data);
     setComments(res.data.comments);
   }
 
+	async function reRender() {
+		
+	}
+
   useEffect(() => {
     f()
   },[])
+
 
   async function toggleComments(event) {
     console.log(event.target.classList.value);
     const s = Array.from(event.target.classList);
     if (!s.includes("button")) setShowComments((p) => !p);
   }
+
+	async function delete_post() {
+		const postId = String(props.post_id);
+		const courseId = String(classContext.classCode_state);
+		const URI = ROUTES.api.del.posts
+			.replace(':courseid',courseId)
+			.replace(':postid', postId)
+		console.log("URI", URI);
+		const res = await axios.delete(URI);
+	}
 
   async function post_comment(){
     const com = document.getElementById(String(props.post_id)).value
@@ -206,6 +222,7 @@ export default function Post(props){
             display: showComments ? "" : "none",
             backgroundColor: "rgb(204,35,22)",
           }}
+					onClick={delete_post}
         >
           Delete this Post
         </button>
