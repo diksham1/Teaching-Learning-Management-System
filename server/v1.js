@@ -556,6 +556,14 @@ router.delete('/courses/:courseid/posts/:postid', async function(req, res) {
 	await db.collection('Post').deleteOne({
 		"_id": ObjectID(postId)
 	})
+	await db.collection('Course').update(
+	{
+		"invite_code": req.params.courseid
+	},
+	{
+		"$pull": {"posts": postId}
+	}
+	)
 	return res.json({"statuscode": 200});
 })
 
