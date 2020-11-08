@@ -5,7 +5,7 @@ const createLiveClassLink = require('./createLiveClassLink')
 const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt')
 const saltRounds = 10; //set to be 10 across all apis for encryption
-
+// delete post, delete student from a course
 require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 const username = process.env.USER_NAME;
@@ -524,7 +524,7 @@ router.get('/courses/:courseid/posts', async function (req, res) {
 })
 
 /**
- * Retrieve a particula post corresponding to a particualr post id 
+ * Retrieve a particular post corresponding to a particualr post id 
  */
 router.get('/courses/:courseid/posts/:postid', async function(req, res) {
 	//const db = await dbconn();
@@ -533,5 +533,42 @@ router.get('/courses/:courseid/posts/:postid', async function(req, res) {
 		"_id": ObjectID(postId)
 	})
 	return res.json(postDetails);
+})
+
+/**
+ *	Delete a particular post given the post ID
+ */
+
+router.delete('/courses/:courseid/posts/:postid', async function(req, res) {
+	const postId = req.params.postid;
+	await db.collection('Post').deleteOne({
+		"_id": ObjectID(postId)
+	})
+	return res.json({"statuscode": 200});
+})
+
+
+/**
+ * Unenroll a student from a particular course
+ * Returns: statusCode of 200 
+ */
+router.delete('/courses/:courseid/students/:studentid', async function(req, res) {
+	const courseId = req.params.courseid;
+	const studentId = req.params.studentid;
+	
+	try {
+		await db.collection('User').update(
+		{
+			"_id": ObjectID(studentId)
+		},
+		{
+			"$pull": {"courses": courseId}
+		});
+		
+		return res.json({"statuscode": 200});
+	} catch(e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
+	}
 })
 module.exports = router;
