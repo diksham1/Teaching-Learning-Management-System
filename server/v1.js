@@ -285,7 +285,6 @@ router.get('/courses/creator/:creatorid', async function (req, res) {
  * Get post IDs of all posts which are assignments for a particular course
  * filters out the posts for a given course which are also assignment
  */
-//Will look as assignments later
 router.get('/courses/:courseid/assignments', async function (req, res) {
 	try {
 		let assignmentList = []	
@@ -326,7 +325,9 @@ router.get('/courses/:courseid/assignments', async function (req, res) {
 	}
 })
 
-//would look at it later
+/**
+ * API to post a new assignment 
+ */
 router.post('/courses/:courseid/assignments', async function (req, res) {
 	//const db = await dbconn();
 	const col = db.collection('Assignment');
@@ -341,9 +342,9 @@ router.post('/courses/:courseid/assignments', async function (req, res) {
 	const insertId = insertResponse["insertedId"]
 
 	let assignmentPost = {};
-	assignmentPost["creator_ID"] = req.body["creator_ID"]
+	assignmentPost["creator_id"] = req.body["creator_id"]
 	assignmentPost["post_title"] = "Assignment"
-	assignmentPost["post_text"] = req.body["description"]
+	assignmentPost["post_text"] = req.body["post_text"]
 	assignmentPost["files"] = [req.body["file_url"]]
 	assignmentPost["assignment_id"] = insertId;
 	assignmentPost["comments"] = []	
@@ -351,6 +352,17 @@ router.post('/courses/:courseid/assignments', async function (req, res) {
 	const postInsertResponse = await db.collection('Post').insertOne(assignmentPost)
 	const postId = postInsertResponse["insertedId"]
 
+	db.collection('Course').update(
+		{
+			"invite_code": req.params.courseid,
+		},
+		{
+			"$push":	
+				{
+					"posts": postId.toString()
+				}
+		}
+	)
 	return res.json({
 		"statuscode": 201,
 		"assignment_id": postId,
