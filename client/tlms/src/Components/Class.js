@@ -1,4 +1,5 @@
 import React,{useContext,useEffect, useState} from 'react'
+import {Redirect} from 'react-router-dom'
 import SideBar from './SideBar.js'
 import Header from './Header'
 import Post from './Post'
@@ -16,6 +17,7 @@ export default function Class(){
     const authContext = useContext(AuthContext)
 
     const [posts_array, setposts_array] = useState(null)
+    const [redirect,setredirect] = useState(false)
 
     async function getPostList() {
       const res = await axios.get(
@@ -25,7 +27,6 @@ export default function Class(){
           "/posts"
       );
       setposts_array(res.data.posts);
-      console.log(res.data.posts);
     }
 
     useEffect(() => {
@@ -36,9 +37,13 @@ export default function Class(){
       getPostList();
     }, [classContext.classCode_state]);
 
+    if(redirect){
+      return (<Redirect to = "/dashboard"></Redirect>)
+    }
+
     return (
       <div>
-        <div style = {{display : "none"}}>{classContext.classCode_state}</div>
+        <div style={{ display: "none" }}>{classContext.classCode_state}</div>
         <Header
           name={
             authContext.name_state.indexOf(" ") == -1
@@ -52,19 +57,30 @@ export default function Class(){
         />
         <div class="flex flex-row">
           <div class="mx-2 lg:w-2/12 w-3/12">
-            <SideBar classname={classContext.className_state} isTeacher = {authContext.isEducator_state}/>
+            <SideBar
+              classname={classContext.className_state}
+              isTeacher={authContext.isEducator_state}
+              setredirect = {setredirect}
+              setposts_array = {setposts_array}
+            />
           </div>
           <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2">
-            <Mypost getPostList = {getPostList} isTeacher = {authContext.isEducator_state}/>
-            {(posts_array == null)
+            <Mypost
+              getPostList={getPostList}
+              isTeacher={authContext.isEducator_state}
+            />
+            {posts_array == null
               ? ""
-              : posts_array.reverse().map((post_id) => (
-                  <Post
-                    key={post_id}
-                    post_id = {post_id}
-                    isTeacher = {authContext.isEducator_state}
-                  />
-                ))}
+              : posts_array
+                  .reverse()
+                  .map((post_id) => (
+                    <Post
+                      key={post_id}
+                      post_id={post_id}
+                      isTeacher={authContext.isEducator_state}
+                      getPostList={getPostList}
+                    />
+                  ))}
           </div>
           <div class="w-3/12 lg:block hidden">
             <TaskSideBar />

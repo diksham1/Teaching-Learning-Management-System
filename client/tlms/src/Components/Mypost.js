@@ -55,7 +55,34 @@ export default function Mypost(props){
   }
 
   async function handle_create_assignment(){
-    window.alert("Yet to be implemented")
+    var deadline = document.getElementById("deadline").value;
+    var d = new Date()
+    var cur_date = d.toISOString().substring(0,16)
+    if(cur_date > deadline){
+      window.alert('Invalid Date')
+      return
+    }
+    const ptitle = document.getElementById("myposttitle").innerHTML;
+    const ptext = document.getElementById("myposttext").innerHTML;
+    const body = {
+      "post_title" : ptitle,
+      "post_text" : ptext,
+      "creator_id" : authContext.id_state,
+      "files" : [],
+      "deadline" : deadline
+    };
+    console.log(body);
+    const response = await axios.post(
+      ROUTES.api.post.courses +
+        "/" +
+        String(classContext.classCode_state) +
+        "/assignments",
+      body
+    );
+    document.getElementById("myposttitle").innerHTML = "Post Title Here";
+    document.getElementById("myposttext").innerHTML = "Write a Post";
+    setisAssignment(false)
+    props.getPostList();
   }
 
   const outerdiv = "w-full shadow-xl hover:shadow-2xl" 
@@ -117,7 +144,8 @@ export default function Mypost(props){
               {isAssignment ? "Unmark As Assignment" : "Mark As Assignment"}
             </button>
             <input
-              type="date"
+              id = "deadline"
+              type="datetime-local"
               class={inputcss1}
               style={{
                 display: isAssignment ? "" : "none",
