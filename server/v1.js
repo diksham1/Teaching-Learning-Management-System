@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const multer = require('multer')
 const createInviteCode = require('./createInviteCode')
 const createLiveClassLink = require('./createLiveClassLink')
 const ObjectID = require('mongodb').ObjectID;
@@ -652,5 +653,31 @@ async function(req, res) {
 	}
 })
 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "files");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname); //date trying to make filename unique
+  },
+});
+
+var upload = multer({ storage: storage }).single("file");
+
+router.post("/upload", async function (req, res) {
+
+	try{
+		upload(req, res, function (err) {
+			if (err instanceof multer.MulterError) {
+			return res.status(500).json(err);
+			} else if (err) {
+			return res.status(500).json(err);
+			}
+			return res.status(200).send(req.file);
+		});
+	}catch(e){
+		console.log(e)
+	}
+});    
 
 module.exports = router;

@@ -14,6 +14,7 @@ export default function Post(props){
   const [isDone, setisDone] = useState(false);
   const [viewSubmissions, setviewSubmissions] = useState(false);
   const [deadline,setdeadline] = useState(null)
+  const [assignemntfile,setassignmentfile] = useState(null)
 
   const [apiCallResult,setapiCallResult] = useState(null)
   const [creatorname,setcreatorname] = useState(null)
@@ -78,6 +79,24 @@ export default function Post(props){
     const res = await axios.delete(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/posts/" + props.post_id)
     console.log(res)
     props.getPostList()
+  }
+
+  async function uploadfilechange(event){
+    console.log(event.target.files[0])
+    setassignmentfile(event.target.files[0]);
+  }
+
+  async function uploadfile(){
+    const data = new FormData();
+    data.append('file', assignemntfile)
+    axios
+      .post("http://localhost:8080/v1/upload", data, {
+        // receive two    parameter endpoint url ,form data
+      })
+      .then((res) => {
+        // then print response status
+        console.log(res);
+      });
   }
 
   //{isUploaded ? "View Submission" : "Upload Assignment"}
@@ -145,13 +164,14 @@ export default function Post(props){
             style={{
               display: props.isTeacher ? "none" : "",
             }}
+            onChange = {uploadfilechange}
           ></input>
           <button
             class={css10}
             style={{
               display: props.isTeacher ? "none" : "",
             }}
-            onClick={() => setisUploaded(true)}
+            onClick={uploadfile}
           >
             {isUploaded && isDone ? "View Submission" : "Upload Assignment"}
           </button>
