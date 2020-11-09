@@ -87,8 +87,10 @@ export default function Mypost(props){
 
   const outerdiv = "w-full shadow-xl hover:shadow-2xl" 
   const nameposter = "bg-gray-700 text-gray-200 p-4 cursor-pointer text-2xl"
-  const posttitle = "w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 border-b-2 border-gray-400 border-solid focus:text-opacity-100 focus:outline-none"
-  const postbody = "w-full bg-gray-100 text-black p-4 text-lg text-opacity-50 focus:text-opacity-100 focus:outline-none"
+  const posttitle = "w-full text-black p-4 text-lg text-opacity-50 border-b-2 border-gray-400 border-solid focus:text-opacity-100 focus:outline-none " + (props.showmypost?"bg-gray-100":"bg-gray-200")
+  const postbody =
+    "w-full text-black p-4 text-lg text-opacity-50 focus:text-opacity-100 focus:outline-none " +
+    (props.showmypost ? "bg-gray-100" : "bg-gray-200");
   const optdivcss = "w-full bg-gray-100 text-white p-4 text-lg flex flex-row justify-end"
   const buttoncss1 = "rounded-lg text-center w-4/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold"
   const inputcss1 = "rounded-lg text-center w-4/12 p-2 mx-2 text-black ng-gray-200 hover:opacity-75 font-semibold"
@@ -99,18 +101,16 @@ export default function Mypost(props){
 
   return (
     <div>
-      <div class= {outerdiv}>
-        <div class= {nameposter}>
-          You
-        </div>
+      <div class={outerdiv}>
+        <div class={nameposter}>You</div>
         <div>
           <div
             class={posttitle}
             id="myposttitle"
             style={{
-              display: "inline-block"
+              display: "inline-block",
             }}
-            contentEditable="true"
+            contentEditable={props.showmypost ? "true" : "false"}
             onFocus={mypost_title_focus}
             onBlur={mypost_title_blur}
             onKeyDown={(evt) => {
@@ -123,11 +123,11 @@ export default function Mypost(props){
           </div>
           <div
             class={postbody}
-            style = {{
-              display : "inline-block"
+            style={{
+              display: "inline-block",
             }}
             id="myposttext"
-            contentEditable="true"
+            contentEditable={props.showmypost ? "true" : "false"}
             onFocus={mypost_focus}
             onBlur={mypost_blur}
           >
@@ -144,17 +144,20 @@ export default function Mypost(props){
               {isAssignment ? "Unmark As Assignment" : "Mark As Assignment"}
             </button>
             <input
-              id = "deadline"
+              id="deadline"
               type="datetime-local"
               class={inputcss1}
               style={{
                 display: isAssignment ? "" : "none",
               }}
             ></input>
-            <button class={buttoncss2}>
-              Attach File
-            </button>
-            <button class={buttoncss3} onClick = {(isAssignment)?handle_create_assignment:handle_create_post}>
+            <button class={buttoncss2}>Attach File</button>
+            <button
+              class={buttoncss3}
+              onClick={
+                props.showmypost?(isAssignment ? handle_create_assignment : handle_create_post):(() => {})
+              }
+            >
               Post
             </button>
           </div>
