@@ -277,6 +277,26 @@ router.get('/courses/creator/:creatorid', async function (req, res) {
 	} 
 })
 
+router.post('/courses/:courseid/assignments/:assignmentid/submissions', async function (req, res) {
+	try {
+		await db.collection('Assignment')
+		.update({
+							"_id": ObjectID(req.params.assignmentid)
+						},
+						{
+							"$push":	
+								{
+									"submissions": req.body
+								}
+						}
+					);
+		return res.json({"statuscode": 200});
+	} catch(e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
+	}
+})
+
 /**
  * Get post IDs of all posts which are assignments for a particular course
  * filters out the posts for a given course which are also assignment
@@ -607,4 +627,30 @@ router.delete('/courses/:courseid/students/:studentid', async function(req, res)
 		return res.json(errorOccuredResponse);
 	}
 })
+
+
+//submission id is the student id
+router.delete('/courses/:courseid/assignments/:assignmentid/submissions/:submissionid', 
+async function(req, res) {
+	const courseId = req.params.courseid;
+	const assignmentId = req.params.assignmentid;
+	const submissionId = req.params.submissionid;	
+
+	try {
+		await db.collection('Assignment').update(
+		{
+			"_id": ObjectID(assignmentId)
+		},
+		{
+			"$pull": {"submissions": {"student_id": submissionId}}
+		});
+		
+		return res.json({"statuscode": 200});
+	} catch(e) {
+		console.log(e);
+		return res.json(errorOccuredResponse);
+	}
+})
+
+
 module.exports = router;
