@@ -52,14 +52,14 @@ export default function DashBoard(){
 
         />
         <div class="flex flex-row">
-          <div class="lg:w-9/12 w-full flex flex-col space-y-4 px-16 py-2 ">
+          <div class="w-full flex flex-col space-y-4 px-16 py-2 ">
             {(course_array == null)? "" : course_array.reverse().map((course) => (
               <ClassCard key={course} classCode={course} isStudent = {!authContext.isEducator_state}/>
               ))
             }
           </div>
-          <div class="w-3/12 lg:block hidden">
-            <TaskSideBar />
+          <div class="w-2/12 h-screen">
+            
           </div>
         </div>
         <Footer />
