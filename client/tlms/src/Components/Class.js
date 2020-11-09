@@ -58,7 +58,7 @@ export default function Class(){
           isStudent={!authContext.isEducator_state}
         />
         <div class="flex flex-row">
-          <div class="mx-2 lg:w-2/12 w-3/12">
+          <div class="mx-2 w-3/12">
             <SideBar
               classname={classContext.className_state}
               isTeacher={authContext.isEducator_state}
@@ -67,7 +67,7 @@ export default function Class(){
               setshowmypost = {setshowmypost}
             />
           </div>
-          <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2"
+          <div class="w-9/12 mx-2 flex flex-col space-y-4 p-2"
           >
             <Mypost
               getPostList={getPostList}
@@ -86,9 +86,6 @@ export default function Class(){
                       getPostList={getPostList}
                     />
                   ))}
-          </div>
-          <div class="w-3/12 lg:block hidden">
-            <TaskSideBar />
           </div>
         </div>
         <Footer />

@@ -72,7 +72,7 @@ export default function SideBar(props){
     const sidebarTitleDiv = 
       "border-b-2 hover:border-opacity-50 text-center text-xl text-black  border-black content-center w-full p-3"
     const outermostDiv = 
-      "flex flex-col items-center bg-gray-200 w-full border-solid my-2 border-2 border-opacity-50 border-gray-700"
+      "flex flex-col items-center bg-gray-200 h-screen w-full border-solid my-2 border-2 border-opacity-50 border-gray-700"
     const optionContainerDiv = 
       "w-full flex flex-col outline-none bg-gray-500 items-center h-1/12 mb-2"
     //___________________________________________________________________________
@@ -116,7 +116,7 @@ export default function SideBar(props){
         <div
           class={outerButtonDiv}
           style={{
-            display: props.isTeacher ? "" : "none",
+            display: "none",
           }}
         >
           <button
@@ -128,19 +128,22 @@ export default function SideBar(props){
             Create Test
           </button>
         </div>
-        <div
-          class={outerButtonDiv}
-        >
+        <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
               isCurrentlyActive === 7 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_my_students}
           >
-            {props.isTeacher?"My Students":"My Classmates"}
+            {props.isTeacher ? "My Students" : "My Classmates"}
           </button>
         </div>
-        <div class={outerButtonDiv}>
+        <div
+          class={outerButtonDiv}
+          style={{
+            display: "none",
+          }}
+        >
           <button
             class={buttonStyle.concat(
               isCurrentlyActive === 4 ? " text-blue-400 font-semibold" : ""
@@ -150,7 +153,12 @@ export default function SideBar(props){
             {props.isTeacher ? "Start Livestream" : "Attend Live Class"}
           </button>
         </div>
-        <div class={outerButtonDiv}>
+        <div
+          class={outerButtonDiv}
+          style={{
+            display: "none",
+          }}
+        >
           <button
             class={buttonStyle.concat(
               isCurrentlyActive === 5 ? " text-blue-400 font-semibold" : ""
@@ -165,7 +173,11 @@ export default function SideBar(props){
             class={buttonStyle.concat(
               isCurrentlyActive === 8 ? " text-blue-400 font-semibold" : ""
             )}
-            onClick={(props.isTeacher)?handle_delete_class:handle_click_leaveexit_class}
+            onClick={
+              props.isTeacher
+                ? handle_delete_class
+                : handle_click_leaveexit_class
+            }
           >
             {props.isTeacher ? "Delete Class" : "Leave Class"}
           </button>
@@ -177,9 +189,7 @@ export default function SideBar(props){
             )}
             onClick={handle_click_back}
           >
-            <Link to="/dashboard">
-              {"< " + "Back"}
-            </Link>
+            <Link to="/dashboard">{"< " + "Back"}</Link>
           </button>
         </div>
       </div>
