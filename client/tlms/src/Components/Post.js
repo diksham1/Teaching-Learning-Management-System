@@ -29,6 +29,7 @@ export default function Post(props){
         "/posts/" +
         String(props.post_id)
     );
+		console.log("res", res);
     const res2 = await axios.get(ROUTES.api.get.users + "/" + res.data.creator_id)
     setcreatorname(res2.data.name)
     setapiCallResult(res.data);
@@ -38,9 +39,14 @@ export default function Post(props){
     setComments(res.data.comments);
   }
 
+	async function reRender() {
+		
+	}
+
   useEffect(() => {
     f()
   },[])
+
 
   async function toggleComments(event) {
     console.log(event.target.classList.value);
@@ -69,7 +75,7 @@ export default function Post(props){
     f()
   }
 
-  async function delete_post(){
+  async function handle_delete_post(){
     const res = await axios.delete(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/posts/" + props.post_id)
     console.log(res)
     props.getPostList()
@@ -217,7 +223,7 @@ export default function Post(props){
             display: showComments ? (classContext.isEducator_state ? "" : (apiCallResult.creator_id == authContext.id_state) ? "" : "none") : "none",
             backgroundColor: "rgb(204,35,22)",
           }}
-          onClick={delete_post}
+          onClick={handle_delete_post}
         >
           Delete this Post
         </button>
