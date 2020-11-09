@@ -13,6 +13,7 @@ export default function Post(props){
   const [hasAssignment,sethasAssignment] = useState(false)
   const [isDone, setisDone] = useState(false);
   const [viewSubmissions, setviewSubmissions] = useState(false);
+  const [deadline,setdeadline] = useState(null)
 
   const [apiCallResult,setapiCallResult] = useState(null)
   const [creatorname,setcreatorname] = useState(null)
@@ -35,13 +36,11 @@ export default function Post(props){
     setapiCallResult(res.data);
     if(res.data.assignment_id){
       sethasAssignment(true)
+      const res2 = await axios.get(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/assignments/" + res.data.assignment_id)
+      setdeadline(res2.data.deadline)
     }
     setComments(res.data.comments);
   }
-
-	async function reRender() {
-		
-	}
 
   useEffect(() => {
     f()
@@ -126,7 +125,7 @@ export default function Post(props){
             backgroundColor: !isDone ? "rgb(204,35,22)" : "rgb(22,204,22)",
           }}
         >
-          {!isDone ? "Due " + props.dueDate : "Submitted"}
+          {!isDone ? "Due " + deadline : "Submitted"}
         </div>
       </div>
       <div class={css6} onClick={toggleComments}>

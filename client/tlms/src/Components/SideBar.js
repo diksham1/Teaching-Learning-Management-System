@@ -12,6 +12,7 @@ export default function SideBar(props){
     const authContext = useContext(AuthContext)
 
     async function handle_click_class_home(){
+      props.setshowmypost(true)
       const res = await axios.get(
         ROUTES.api.get.courses +
           "/" +
@@ -22,37 +23,13 @@ export default function SideBar(props){
       setisCurrentlyActive(1)
     }
     async function handle_click_my_post() {
-      const res = await axios.get(
-        ROUTES.api.get.courses +
-          "/" +
-          String(classContext.classCode_state) +
-          "/posts"
-      );
-      //props.setposts_array(res.data.posts.filter(p => {return (p == "5fa8190b03d6743eb84ceb6e")}))
-      const new_arr = res.data.posts.filter((p) => {
-        axios
-          .get(
-            ROUTES.api.get.courses +
-              "/" +
-              String(classContext.classCode_state) +
-              "/posts/" +
-              p
-          )
-          .then((res2) => {
-            console.log(res2);
-            console.log(res2.data.creator_id);
-            console.log(authContext.id_state);
-            console.log(res2.data.creator_id == authContext.id_state);
-            return new Promise(() => {return res2.data.creator_id == authContext.id_state});
-          }).then((p) => p);
-        //  return (Math.random() < 0.5)
-      });
-      console.log(new_arr)
-      props.setposts_array(new_arr);
-
+      props.setshowmypost(false)
+      const res = await axios.get(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/students/" + authContext.id_state + "/posts" )
+      props.setposts_array(res.data)
       setisCurrentlyActive(2);
     }
     async function handle_click_assignments() {
+      props.setshowmypost(false);
       const res = await axios.get(
         ROUTES.api.get.courses +
           "/" +
