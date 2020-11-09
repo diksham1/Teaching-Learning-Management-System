@@ -10,6 +10,7 @@ const parse = require("html-react-parser");
 export default function Post(props){
   const [showComments, setShowComments] = useState(false);
   const [isUploaded, setisUploaded] = useState(false);
+  const [hasAssignment,sethasAssignment] = useState(false)
   const [isDone, setisDone] = useState(false);
   const [viewSubmissions, setviewSubmissions] = useState(false);
 
@@ -31,6 +32,9 @@ export default function Post(props){
     const res2 = await axios.get(ROUTES.api.get.users + "/" + res.data.creator_id)
     setcreatorname(res2.data.name)
     setapiCallResult(res.data);
+    if(res.data.assignment_id){
+      sethasAssignment(true)
+    }
     setComments(res.data.comments);
   }
 
@@ -65,6 +69,12 @@ export default function Post(props){
     f()
   }
 
+  async function delete_post(){
+    const res = await axios.delete(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/posts/" + props.post_id)
+    console.log(res)
+    props.getPostList()
+  }
+
   //{isUploaded ? "View Submission" : "Upload Assignment"}
   const outerdiv = "w-full shadow-xl hover:shadow-2xl";
   const mainpost = "flex flex-row bg-gray-700 text-gray-200 p-4 cursor-pointer";
@@ -94,11 +104,11 @@ export default function Post(props){
   return (
     <div class={outerdiv}>
       <div class={mainpost} onClick={toggleComments}>
-      <div class={imposter}>{(creatorname == null)? "" : creatorname}</div>
+        <div class={imposter}>{creatorname == null ? "" : creatorname}</div>
         <div
           class={css4}
           style={{
-            display: props.hasAssignment ? "" : "none",
+            display: hasAssignment ? "" : "none",
           }}
         >
           Assignment
@@ -106,7 +116,7 @@ export default function Post(props){
         <div
           class={css5}
           style={{
-            display: props.hasAssignment ? "" : "none",
+            display: hasAssignment ? "" : "none",
             backgroundColor: !isDone ? "rgb(204,35,22)" : "rgb(22,204,22)",
           }}
         >
@@ -123,10 +133,9 @@ export default function Post(props){
         <div
           class={css9}
           style={{
-            display: props.hasAssignment ? "" : "none",
+            display: hasAssignment ? "" : "none",
           }}
         >
-
           <input
             class={css11}
             type="file"
@@ -171,13 +180,15 @@ export default function Post(props){
           ? ""
           : comments.map((comment) => (
               <Comment
-                name = {comment.commentator_name.indexOf(" ") == -1
-              ? comment.commentator_name
-              : comment.commentator_name.substring(
-                  0,
-                  comment.commentator_name.indexOf(" ")
-                )}
-                comment = {comment.comment}
+                name={
+                  comment.commentator_name.indexOf(" ") == -1
+                    ? comment.commentator_name
+                    : comment.commentator_name.substring(
+                        0,
+                        comment.commentator_name.indexOf(" ")
+                      )
+                }
+                comment={comment.comment}
               />
             ))}
       </div>
@@ -189,8 +200,8 @@ export default function Post(props){
       >
         <input
           class={cssbored2}
-          style = {{
-            display : "inline-block"
+          style={{
+            display: "inline-block",
           }}
           placeholder="Your Comment here"
           id={String(props.post_id)}
@@ -203,9 +214,10 @@ export default function Post(props){
         <button
           class={cssbored5}
           style={{
-            display: showComments ? "" : "none",
+            display: showComments ? (classContext.isEducator_state ? "" : (apiCallResult.creator_id == authContext.id_state) ? "" : "none") : "none",
             backgroundColor: "rgb(204,35,22)",
           }}
+          onClick={delete_post}
         >
           Delete this Post
         </button>

@@ -1,17 +1,66 @@
-import React , {useState} from 'react'
+import React , {useState,useContext} from 'react'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
+import ROUTES from '../routes'
+import {ClassContext} from "../Contexts/ClassContext"
+import {AuthContext} from "../Contexts/AuthContext"
 
 export default function SideBar(props){
     const [isCurrentlyActive,setisCurrentlyActive] = useState(1)
 
+    const classContext = useContext(ClassContext)
+    const authContext = useContext(AuthContext)
 
     async function handle_click_class_home(){
+      const res = await axios.get(
+        ROUTES.api.get.courses +
+          "/" +
+          String(classContext.classCode_state) +
+          "/posts"
+      );
+      props.setposts_array(res.data.posts);
       setisCurrentlyActive(1)
     }
     async function handle_click_my_post() {
+      const res = await axios.get(
+        ROUTES.api.get.courses +
+          "/" +
+          String(classContext.classCode_state) +
+          "/posts"
+      );
+      //props.setposts_array(res.data.posts.filter(p => {return (p == "5fa8190b03d6743eb84ceb6e")}))
+      const new_arr = res.data.posts.filter((p) => {
+        axios
+          .get(
+            ROUTES.api.get.courses +
+              "/" +
+              String(classContext.classCode_state) +
+              "/posts/" +
+              p
+          )
+          .then((res2) => {
+            console.log(res2);
+            console.log(res2.data.creator_id);
+            console.log(authContext.id_state);
+            console.log(res2.data.creator_id == authContext.id_state);
+            return new Promise(() => {return res2.data.creator_id == authContext.id_state});
+          }).then((p) => p);
+        //  return (Math.random() < 0.5)
+      });
+      console.log(new_arr)
+      props.setposts_array(new_arr);
+
       setisCurrentlyActive(2);
     }
     async function handle_click_assignments() {
+      const res = await axios.get(
+        ROUTES.api.get.courses +
+          "/" +
+          String(classContext.classCode_state) +
+          "/assignments"
+      );
+      console.log(res)
+      props.setposts_array(res.data.assignment_list);
       setisCurrentlyActive(3);
     }
     async function handle_click_attend_live_class() {
@@ -27,8 +76,14 @@ export default function SideBar(props){
       setisCurrentlyActive(7)
     }
     async function handle_click_leaveexit_class() {
+      await axios.delete(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/students/" + authContext.id_state)
+      props.setredirect(true)
       setisCurrentlyActive(8)
     }
+    async function handle_delete_class(){
+        setisCurrentlyActive(8);
+    }
+
     async function handle_click_back(){
       setisCurrentlyActive(9)
     }
@@ -42,7 +97,7 @@ export default function SideBar(props){
     const sidebarTitleDiv = 
       "border-b-2 hover:border-opacity-50 text-center text-xl text-black  border-black content-center w-full p-3"
     const outermostDiv = 
-      "flex flex-col items-center bg-gray-200 w-full h-screen border-solid my-2 border-2 border-opacity-50 border-gray-700"
+      "flex flex-col items-center bg-gray-200 w-full border-solid my-2 border-2 border-opacity-50 border-gray-700"
     const optionContainerDiv = 
       "w-full flex flex-col outline-none bg-gray-500 items-center h-1/12 mb-2"
     //___________________________________________________________________________
@@ -135,7 +190,7 @@ export default function SideBar(props){
             class={buttonStyle.concat(
               isCurrentlyActive == 8 ? " text-blue-400 font-semibold" : ""
             )}
-            onClick={handle_click_leaveexit_class}
+            onClick={(props.isTeacher)?handle_delete_class:handle_click_leaveexit_class}
           >
             {props.isTeacher ? "Delete Class" : "Leave Class"}
           </button>

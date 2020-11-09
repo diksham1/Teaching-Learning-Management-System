@@ -39,13 +39,11 @@ router.get('/',async function(req,res){
 	res.send("<h1>APIs currently under developement.</h1>");
 })
 
-/**
+/*
 router.get('/scrap',async function(req,res){ //only to be used to delete all test documents
-	const db = await dbconn()
-	db.collection('User').remove({})
-	res.send("hey")
+	db.collection("Post").remove({})
 })
- */
+**/
 
 //This accepts login details for verification....
 /**
@@ -331,23 +329,24 @@ router.get('/courses/:courseid/assignments', async function (req, res) {
 router.post('/courses/:courseid/assignments', async function (req, res) {
 	//const db = await dbconn();
 	const col = db.collection('Assignment');
-	let assignmentData = req.body;
+	let assignmentData = {};	
 
-	delete assignmentData["description"]
-	delete assignmentData["file_url"]
 
 	assignmentData["submissions"] = []	
 	assignmentData["schema_ver"] = 1.0
-	const insertResponse = await col.insertOne(assignmentData);
-	const insertId = insertResponse["insertedId"]
+	assignmentData['deadline'] = req.body.deadline
 
+	const insertResponse = await col.insertOne(assignmentData);
+	const insertId = insertResponse["ops"][0]["_id"];
+ 
 	let assignmentPost = {};
-	assignmentPost["creator_id"] = req.body["creator_id"]
-	assignmentPost["post_title"] = "Assignment"
-	assignmentPost["post_text"] = req.body["post_text"]
-	assignmentPost["files"] = [req.body["file_url"]]
-	assignmentPost["assignment_id"] = insertId;
-	assignmentPost["comments"] = []	
+  	assignmentPost["creator_id"] = req.body.creator_id;
+  	assignmentPost["post_title"] = "Assignment";
+  	assignmentPost["post_text"] = req.body.post_text;
+  	assignmentPost["files"] = req.body.files;
+  	assignmentPost["assignment_id"] = insertId;
+	assignmentPost["comments"] = [];
+	  
 
 	const postInsertResponse = await db.collection('Post').insertOne(assignmentPost)
 	const postId = postInsertResponse["insertedId"]
