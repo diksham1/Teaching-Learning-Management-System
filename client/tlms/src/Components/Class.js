@@ -16,6 +16,8 @@ export default function Class(){
     const classContext = useContext(ClassContext)
     const authContext = useContext(AuthContext)
 
+
+    const [showmypost,setshowmypost] = useState(true)
     const [posts_array, setposts_array] = useState(null)
     const [redirect,setredirect] = useState(false)
 
@@ -62,12 +64,15 @@ export default function Class(){
               isTeacher={authContext.isEducator_state}
               setredirect = {setredirect}
               setposts_array = {setposts_array}
+              setshowmypost = {setshowmypost}
             />
           </div>
-          <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2">
+          <div class="lg:w-7/12 w-9/12 mx-2 flex flex-col space-y-4 p-2"
+          >
             <Mypost
               getPostList={getPostList}
               isTeacher={authContext.isEducator_state}
+              showmypost = {showmypost}
             />
             {posts_array == null
               ? ""
