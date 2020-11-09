@@ -478,18 +478,39 @@ router.get('/courses/:courseid/students', async function(req, res) {
 });
 
 /**
- * @todo /courses/:courseid/students/:studentid is practically useless
- * This api endpoint is useless because we can get the student details from 
- * get /v1/users/:userid
- * and student is not existentially dependent on course
+ * Returns the posts by a particular student in a course
  */
-router.get('/courses/:courseid/students/:studentid', async function (req, res) {
+router.get('/courses/:courseid/students/:studentid/posts', async function (req, res) {
 	const studentId = req.params.studentid;
-	//const db = await dbconn();
-	const userDetails = await db.collection('User').findOne({
-		'_id': ObjectID(studentId)
+	const courseId = req.params.courseid;
+	
+	const allPostsOfCourse = await db.collection('Course').find({
+		'invite_code': courseId
+	})
+	.project({
+		"_id": 0,
+		"posts": 1
+	})
+	.toArray()
+	.then((allPosts) => {
+		return allPosts[0]["posts"]
 	});
-	return res.json(userDetails);
+
+	const allPostsOfStudent = await db.collection('Post').find({
+		'creator_id': studentId
+	})
+	.project({
+		"_id": 1
+	})
+	.toArray()
+	.then((postsArray) => {
+		return postsArray.map((post) => {
+			return String(post["_id"]);
+		})
+	});
+
+	const commonPosts = allPostsOfCourse.filter(value => allPostsOfStudent.includes(value));
+	return res.json(commonPosts);
 });
 
 /**
