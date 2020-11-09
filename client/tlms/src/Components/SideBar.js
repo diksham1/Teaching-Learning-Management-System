@@ -7,7 +7,6 @@ import {AuthContext} from "../Contexts/AuthContext"
 
 export default function SideBar(props){
     const [isCurrentlyActive,setisCurrentlyActive] = useState(1)
-
     const classContext = useContext(ClassContext)
     const authContext = useContext(AuthContext)
 
@@ -36,7 +35,6 @@ export default function SideBar(props){
           String(classContext.classCode_state) +
           "/assignments"
       );
-      console.log(res)
       props.setposts_array(res.data.assignment_list);
       setisCurrentlyActive(3);
     }
@@ -88,7 +86,7 @@ export default function SideBar(props){
         <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 1 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 1 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_class_home}
           >
@@ -98,7 +96,7 @@ export default function SideBar(props){
         <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 2 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 2 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_my_post}
           >
@@ -108,7 +106,7 @@ export default function SideBar(props){
         <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 3 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 3 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_assignments}
           >
@@ -123,7 +121,7 @@ export default function SideBar(props){
         >
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 6 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 6 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_create_test}
           >
@@ -135,7 +133,7 @@ export default function SideBar(props){
         >
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 7 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 7 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_my_students}
           >
@@ -145,7 +143,7 @@ export default function SideBar(props){
         <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 4 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 4 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_attend_live_class}
           >
@@ -155,7 +153,7 @@ export default function SideBar(props){
         <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 5 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 5 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_past_recording}
           >
@@ -165,7 +163,7 @@ export default function SideBar(props){
         <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 8 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 8 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={(props.isTeacher)?handle_delete_class:handle_click_leaveexit_class}
           >
@@ -175,7 +173,7 @@ export default function SideBar(props){
         <div class={outerButtonDiv}>
           <button
             class={buttonStyle.concat(
-              isCurrentlyActive == 9 ? " text-blue-400 font-semibold" : ""
+              isCurrentlyActive === 9 ? " text-blue-400 font-semibold" : ""
             )}
             onClick={handle_click_back}
           >

@@ -55,7 +55,7 @@ export default function Post(props){
 
   async function post_comment(){
     const com = document.getElementById(String(props.post_id)).value
-    const res = await axios.post(
+    await axios.post(
       ROUTES.api.get.courses +
         "/" +
         String(classContext.classCode_state) +
@@ -67,7 +67,7 @@ export default function Post(props){
           "commentator_name" : authContext.name_state,
           "comment" : com
         }
-    );
+    ).then((res) => {});
     //console.log(res)
     document.getElementById(String(props.post_id)).value = "";
     document.getElementById(String(props.post_id)).placeholder = "Your Comment Here";
@@ -86,17 +86,15 @@ export default function Post(props){
   const imposter = "w-7/12 text-2xl";
   const css4 =
     "w-2/12 bg-yellow-700 text-black font-bold rounded-lg text-center p-1";
-  const css5 = "w-3/12 text-white font-bold  rounded-lg text-center p-1 ml-1";
+  const css5 = "w-3/12 text-white font-bold  rounded-lg text-center py-1 ml-1";
   const css6 = "bg-gray-300 cursor-pointer";
   const css7 = "p-2 text-xl";
-  const css8 = "p-4 leading-none";
+  const css8 = "p-4 leading-snug";
   const css9 = "w-full text-center";
   const css10 =
     "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button";
   const css11 =
     "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg text-lg button";
-  const css12 =
-    "p-1 w-11/12 rounded-lg text-lg button cursor-default button focus:outline-none";
   const cssbored1 = "flex flex-row";
   const cssbored2 =
     "w-9/12 p-3 bg-gray-200 focus:bg-gray-300 text-black text-lg rounded-lg";
@@ -186,7 +184,7 @@ export default function Post(props){
           : comments.map((comment) => (
               <Comment
                 name={
-                  comment.commentator_name.indexOf(" ") == -1
+                  comment.commentator_name.indexOf(" ") === -1
                     ? comment.commentator_name
                     : comment.commentator_name.substring(
                         0,
@@ -219,7 +217,7 @@ export default function Post(props){
         <button
           class={cssbored5}
           style={{
-            display: showComments ? (classContext.isEducator_state ? "" : (apiCallResult.creator_id == authContext.id_state) ? "" : "none") : "none",
+            display: showComments ? (authContext.isEducator_state ? "" : ((apiCallResult.creator_id === authContext.id_state) ? "" : "none")) : "none",
             backgroundColor: "rgb(204,35,22)",
           }}
           onClick={handle_delete_post}

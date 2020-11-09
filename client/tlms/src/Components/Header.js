@@ -3,7 +3,7 @@
 //For teacher there are two variants depending on whether the a particualr class is open(in which case the option to add a new assignemnt becomes available)
 
 import React, { useState } from "react";
-import {Link, Redirect} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Logo from "./Logo.js";
 import JoinClassOverlay from "./JoinClassOverlay.js";
 import CreateClassOverlay from './CreateClassOverlay'

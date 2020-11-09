@@ -48,7 +48,7 @@ export default function Class(){
         <div style={{ display: "none" }}>{classContext.classCode_state}</div>
         <Header
           name={
-            authContext.name_state.indexOf(" ") == -1
+            authContext.name_state.indexOf(" ") === -1
               ? authContext.name_state
               : authContext.name_state.substring(
                   0,

@@ -1,4 +1,4 @@
-import React ,{useState, useCallback, useContext, useEffect} from 'react'
+import React ,{useState, useContext, useEffect} from 'react'
 import Header from './Header.js'
 import Footer from './Footer.js'
 import ClassCard from "./ClassCard.js"
@@ -40,7 +40,7 @@ export default function DashBoard(){
       <div>
         <Header
           name={
-            authContext.name_state.indexOf(" ") == -1
+            authContext.name_state.indexOf(" ") === -1
               ? authContext.name_state
               : authContext.name_state.substring(
                   0,

@@ -22,7 +22,7 @@ export default function CreateClassOverlay(props){
         props.f(false)
         document.getElementById("classname_inp").value = "";
         document.getElementById("class_desc_inp").innerHTML = "";
-        if (window.location.pathname == "/dashboard") 
+        if (window.location.pathname === "/dashboard") 
           props.getClassesList();
         if(res.data.result){
             classContext.setclassName_state(p1)

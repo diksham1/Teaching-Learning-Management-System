@@ -4,7 +4,7 @@
 
 
 import React, { useState , useContext} from 'react';
-import { Link , Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import ROUTES from '../routes';
 import Logo from "./Logo.js"
 import Footer from "./Footer.js"
@@ -40,7 +40,7 @@ export default function Login() {
     const password = document.getElementById('pswd').value
 
     const response = await axios.post(ROUTES.api.post.login,{'email' : email , 'password' : password})
-    if(response.data.result == false)
+    if(response.data.result === false)
       setcustommessage("Login Failed")
     else{
       setcustommessage("Login Successful");
@@ -58,7 +58,7 @@ export default function Login() {
     const password = document.getElementById('pswd').value
 
     const response = await axios.post(ROUTES.api.post.login,{'email' : email , 'password' : password})
-    if(response.data.result == false)
+    if(response.data.result === false)
       setcustommessage("Login Failed")
     else{
       setcustommessage("Login Successful");

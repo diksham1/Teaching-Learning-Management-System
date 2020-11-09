@@ -72,13 +72,13 @@ export default function Mypost(props){
       "deadline" : deadline
     };
     console.log(body);
-    const response = await axios.post(
+    await axios.post(
       ROUTES.api.post.courses +
         "/" +
         String(classContext.classCode_state) +
         "/assignments",
       body
-    );
+    ).then((response) => {});
     document.getElementById("myposttitle").innerHTML = "Post Title Here";
     document.getElementById("myposttext").innerHTML = "Write a Post";
     setisAssignment(false)

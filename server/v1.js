@@ -124,7 +124,6 @@ router.post('/users',async function(req, res) {
 		const check1 = (await col.findOne({ email: req.body.email })) == null;
 
 		bcrypt.hash(req.body.password,saltRounds,async (err,hash) => {
-			console.log(hash)
 			user['password'] = hash //the password is hashed before storing in database
 
 			exists = (check1)?false:true
@@ -150,7 +149,6 @@ router.post('/users',async function(req, res) {
  */
 router.get('/users/:userid',async function(req,res){
 	try{
-		console.log(req.params.userid)
 		//const db = await dbconn()
 		const queryResponse = await db.collection('User').findOne({"_id" : ObjectID(req.params.userid)})
 		//search via objectid parameter and return the whole document
@@ -296,11 +294,9 @@ router.get('/courses/:courseid/assignments', async function (req, res) {
 		.project({"posts":1, "_id":0})
 		.toArray()
 		.then((postIdDocument) => {
-			console.log(postIdDocument)
 			return postIdDocument[0]["posts"].map((postId) => ObjectID(postId));
 		})
 
-		console.log(postIdList)
 		
 		const postsWithAssignmentIDList = await db.collection('Post').find({
 			"_id": {

@@ -14,19 +14,19 @@ export default function SignUpFormOverlay(props){
       const p5 = document.getElementById("cpassword").value;
       
       const check1 = (p4 === p5)
-      const check2 = (!isNaN(p3) && p3.length == 10)
+      const check2 = (!isNaN(p3) && p3.length === 10)
       const check3 = validateemail(p2)
 
-      if(check1 == false)
+      if(check1 === false)
         props.setusrmsg('Password Mismatch')
-      else if(check2 == false)
+      else if(check2 === false)
         props.setusrmsg('Phone Number not valid')
-      else if(check3 == false)
+      else if(check3 === false)
         props.setusrmsg('Email is not valid')
       else{
         const res = await axios.post(ROUTES.api.post.users , {'name' : p1 , 'email' : p2 , 'phone': p3 , 'password' : p4})
         console.log(res);
-        if(res.data.result == true)
+        if(res.data.result === true)
           props.setusrmsg('Account Creation Successful')
         else
           props.setusrmsg('Account Creation Failed')

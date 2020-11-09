@@ -17,7 +17,7 @@ export default function JoinClassOverlay(props){
       console.log(res)
       props.f(false)
       document.getElementById("cid").value = ""
-      if(window.location.pathname == "/dashboard")
+      if(window.location.pathname === "/dashboard")
         props.getClassesList();
       if(res.data.result){
         const class_res = await axios.get(ROUTES.api.get.courses + "/" + cid)
