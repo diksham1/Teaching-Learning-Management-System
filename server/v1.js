@@ -11,6 +11,7 @@ require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 const username = process.env.USER_NAME;
 const password = process.env.PASS;
+const uploadFile = require('./uploadFile.js');
 
 const uri = `mongodb+srv://${username}:${password}@tlms.1so97.mongodb.net/tlms?retryWrites=true&w=majority`;
 
@@ -667,12 +668,16 @@ var upload = multer({ storage: storage }).single("file");
 router.post("/upload", async function (req, res) {
 
 	try{
-		upload(req, res, function (err) {
+		upload(req, res, async function (err) {
 			if (err instanceof multer.MulterError) {
-			return res.status(500).json(err);
+				return res.status(500).json(err);
 			} else if (err) {
-			return res.status(500).json(err);
+				return res.status(500).json(err);
 			}
+			const response = await uploadFile(req.file);
+			req.file["fileURL"] = 
+				`https://tlmsstorage.blob.core.windows.net/posts/${req.file.filename}`;
+			req.file["blobStoreResponse"] = response;
 			return res.status(200).send(req.file);
 		});
 	}catch(e){
