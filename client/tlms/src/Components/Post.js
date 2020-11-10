@@ -5,18 +5,20 @@ import axios from 'axios'
 import {ClassContext} from '../Contexts/ClassContext'
 import {AuthContext} from '../Contexts/AuthContext'
 import ROUTES from '../routes'
+import Submissions from './Submissions'
 const parse = require("html-react-parser");
 
 export default function Post(props){
   const [showComments, setShowComments] = useState(false);
-  const [isUploaded, setisUploaded] = useState(false);
   const [hasAssignment,sethasAssignment] = useState(false)
   const [isDone, setisDone] = useState(false);
   const [viewSubmissions, setviewSubmissions] = useState(false);
   const [deadline,setdeadline] = useState(null)
-  const [assignemntfile,setassignmentfile] = useState(null)
+  const [assignmentfile,setassignmentfile] = useState(null)
+  const [assignmentfilearray, setassignmentfilearray] = useState([]);
 
   const [apiCallResult,setapiCallResult] = useState(null)
+  const [apiCallResult2,setapiCallResult2] = useState(null)
   const [creatorname,setcreatorname] = useState(null)
   const [comments,setComments] = useState(null)
 
@@ -31,7 +33,6 @@ export default function Post(props){
         "/posts/" +
         String(props.post_id)
     );
-		console.log("res", res);
     const res2 = await axios.get(ROUTES.api.get.users + "/" + res.data.creator_id)
     setcreatorname(res2.data.name)
     setapiCallResult(res.data);
@@ -39,6 +40,20 @@ export default function Post(props){
       sethasAssignment(true)
       const res2 = await axios.get(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/assignments/" + res.data.assignment_id)
       setdeadline(res2.data.deadline)
+      setapiCallResult2(res2.data)
+      setisDone(res2.data.submissions.map(p => p.student_id).includes(authContext.id_state))
+      console.log(
+        res2.data.submissions
+          .filter((p) => p.student_id === authContext.id_state)
+      );
+      if(res2.data.submissions.map(p => p.student_id).includes(authContext.id_state)){
+        setassignmentfilearray(
+          res2.data.submissions
+            .filter((p) => p.student_id === authContext.id_state)
+            .map((p) => p.submissions)[0]
+        );
+      }
+      //setassignmentfilearray(res2.data.submissions.filter(p => p.student_id === authContext.id_state).map(p => p.submissions))
     }
     setComments(res.data.comments);
   }
@@ -49,7 +64,6 @@ export default function Post(props){
 
 
   async function toggleComments(event) {
-    console.log(event.target.classList.value);
     const s = Array.from(event.target.classList);
     if (!s.includes("button")) setShowComments((p) => !p);
   }
@@ -87,16 +101,42 @@ export default function Post(props){
   }
 
   async function uploadfile(){
+
     const data = new FormData();
-    data.append('file', assignemntfile)
-    axios
+    data.append('file', assignmentfile)
+    const res = await axios
       .post("http://localhost:8080/v1/upload", data, {
         // receive two    parameter endpoint url ,form data
       })
-      .then((res) => {
-        // then print response status
-        console.log(res);
-      });
+    setassignmentfilearray((p) => p.concat({"filename":res.data.filename,"fileurl":res.data.fileURL}))
+    //assignmentfilearray.push(["Sample.txt","../Sample.txt"])
+    //console.log(assignmentfilearray.map(p => p.fileurl))
+  }
+  async function submit_assignment(){
+      const d = new Date()
+      const n = d.toISOString()
+      console.log(d)
+      console.log(n)
+      const res = await axios.post(ROUTES.api.post.courses + "/" + classContext.classCode_state + "/assignments/" + apiCallResult.assignment_id + "/submissions",{
+        student_id : authContext.id_state,
+        student_name : authContext.name_state,
+        submissions : assignmentfilearray,
+        timestamp : n
+      })
+      setisDone((p) => !p)
+  }
+
+  async function unsubmit_assignment(){
+    const res = await axios.delete(
+      ROUTES.api.post.courses +
+        "/" +
+        classContext.classCode_state +
+        "/assignments/" +
+        apiCallResult.assignment_id +
+        "/submissions/" +
+        authContext.id_state
+    );
+    setisDone((p) => !p)
   }
 
   //{isUploaded ? "View Submission" : "Upload Assignment"}
@@ -114,6 +154,7 @@ export default function Post(props){
     "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button";
   const css11 =
     "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg text-lg button";
+  const css12 = "py-4 px-8"
   const cssbored1 = "flex flex-row";
   const cssbored2 =
     "w-9/12 p-3 bg-gray-200 focus:bg-gray-300 text-black text-lg rounded-lg";
@@ -142,7 +183,12 @@ export default function Post(props){
             backgroundColor: !isDone ? "rgb(204,35,22)" : "rgb(22,204,22)",
           }}
         >
-          {!isDone ? "Due " + deadline : "Submitted"}
+          {!isDone
+            ? "Due " +
+              (deadline == null
+                ? ""
+                : deadline.substring(0, 10) + " " + deadline.substring(11))
+            : "Submitted"}
         </div>
       </div>
       <div class={css6} onClick={toggleComments}>
@@ -153,6 +199,40 @@ export default function Post(props){
           {apiCallResult == null ? "" : parse(apiCallResult.post_text)}
         </div>
         <div
+          class={css12}
+          style={{
+            display:
+              apiCallResult === null || apiCallResult.files.length === 0
+                ? "none"
+                : "",
+          }}
+        >
+          {apiCallResult == null
+            ? ""
+            : apiCallResult.files.map((p) => (
+                <FilePanel
+                  key={p.filename}
+                  filename={p.filename}
+                  fileurl={p.fileurl}
+                />
+              ))}
+        </div>
+
+        <div
+          class={css12}
+          style={{
+            display: assignmentfilearray.length == 0 ? "none" : "",
+          }}
+        >
+          {assignmentfilearray.map((p) => (
+            <FilePanel
+              key={p.filename}
+              filename={p.filename}
+              fileurl={p.fileurl}
+            />
+          ))}
+        </div>
+        <div
           class={css9}
           style={{
             display: hasAssignment ? "" : "none",
@@ -161,26 +241,27 @@ export default function Post(props){
           <input
             class={css11}
             type="file"
+            id={"fileurl" + String(props.post_id)}
             style={{
-              display: props.isTeacher ? "none" : "",
+              display: props.isTeacher || isDone ? "none" : "",
             }}
-            onChange = {uploadfilechange}
+            onChange={uploadfilechange}
           ></input>
           <button
             class={css10}
             style={{
-              display: props.isTeacher ? "none" : "",
+              display: props.isTeacher || isDone ? "none" : "",
             }}
             onClick={uploadfile}
           >
-            {isUploaded && isDone ? "View Submission" : "Upload Assignment"}
+            Upload Assignment"
           </button>
           <button
             class={css10}
             style={{
               display: props.isTeacher ? "none" : "",
             }}
-            onClick={() => setisDone((p) => !p)}
+            onClick={isDone ? unsubmit_assignment : submit_assignment}
           >
             {isDone ? "Unmark as Done" : "Mark as Done"}
           </button>
@@ -189,11 +270,42 @@ export default function Post(props){
             style={{
               display: props.isTeacher ? "" : "none",
             }}
+            onClick={() => {
+              setviewSubmissions((p) => !p);
+              setShowComments(false);
+            }}
           >
-            View Submissions
+            {viewSubmissions ? "Unview Submissions" : "View Submissions"}
           </button>
         </div>
       </div>
+      <div
+        class={
+          "w-full overflow-scroll p-4 bg-gray-400 " +
+          (apiCallResult2 !== null && apiCallResult2.submissions.length !== 0
+            ? "h-48"
+            : "")
+        }
+        style={{
+          display: viewSubmissions ? "" : "none",
+        }}
+      >
+        <div class = "p-2">
+          {apiCallResult2 !== null && apiCallResult2.submissions.length !== 0
+            ? ""
+            : "No Submission yet"}
+          {apiCallResult2 == null
+            ? ""
+            : apiCallResult2.submissions.map((p) => (
+                <Submissions
+                  name={p.student_name}
+                  files={p.submissions}
+                  timestamp={p.timestamp}
+                />
+              ))}
+        </div>
+      </div>
+
       <div
         style={{
           display: showComments ? "" : "none",
@@ -237,7 +349,13 @@ export default function Post(props){
         <button
           class={cssbored5}
           style={{
-            display: showComments ? (authContext.isEducator_state ? "" : ((apiCallResult.creator_id === authContext.id_state) ? "" : "none")) : "none",
+            display: showComments
+              ? authContext.isEducator_state
+                ? ""
+                : apiCallResult.creator_id === authContext.id_state
+                ? ""
+                : "none"
+              : "none",
             backgroundColor: "rgb(204,35,22)",
           }}
           onClick={handle_delete_post}
