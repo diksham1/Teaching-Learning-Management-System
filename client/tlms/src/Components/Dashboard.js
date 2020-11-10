@@ -47,20 +47,25 @@ export default function DashBoard(){
                   authContext.name_state.indexOf(" ")
                 )
           }
-          isStudent = {!authContext.isEducator_state}
-          getClassesList = {getClassesList}
-
+          isStudent={!authContext.isEducator_state}
+          getClassesList={getClassesList}
         />
         <div class="flex flex-row">
+          <div class="w-1/12 h-screen"></div>
           <div class="w-full flex flex-col space-y-4 px-16 py-2 ">
-            {(course_array == null)? "" : course_array.reverse().map((course) => (
-              <ClassCard key={course} classCode={course} isStudent = {!authContext.isEducator_state}/>
-              ))
-            }
+            {course_array == null
+              ? ""
+              : course_array
+                  .reverse()
+                  .map((course) => (
+                    <ClassCard
+                      key={course}
+                      classCode={course}
+                      isStudent={!authContext.isEducator_state}
+                    />
+                  ))}
           </div>
-          <div class="w-2/12 h-screen">
-            
-          </div>
+          <div class="w-2/12 h-screen"></div>
         </div>
         <Footer />
       </div>
