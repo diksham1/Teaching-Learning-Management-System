@@ -3,7 +3,7 @@ import axios from 'axios'
 import {AuthContext} from "../Contexts/AuthContext"
 import {ClassContext} from "../Contexts/ClassContext.js"
 import ROUTES from '../routes'
-
+import FilePanel from './FilePanel'
 
 export default function Mypost(props){
 
@@ -11,6 +11,8 @@ export default function Mypost(props){
   const classContext = useContext(ClassContext)
 
   const [isAssignment,setisAssignment] = useState(false)
+  const [filesarray,setfilesarray] = useState([])
+  const [file,setfile] = useState(null)
 
   async function mypost_focus() {
     if (document.getElementById("myposttext").innerHTML === "Write a Post") {
@@ -43,13 +45,14 @@ export default function Mypost(props){
       "post_title" : ptitle,
       "post_text" : ptext,
       "creator_id" : authContext.id_state,
-      "files" : []
+      "files" : filesarray
     }
     console.log(body)
     const response = await axios.post(ROUTES.api.post.courses + "/" + String(classContext.classCode_state) + "/posts",body)
     console.log(response)
     document.getElementById("myposttitle").innerHTML = "Post Title Here";
     document.getElementById("myposttext").innerHTML = "Write a Post";
+    setfilesarray([])
     props.getPostList()
 
   }
@@ -68,7 +71,7 @@ export default function Mypost(props){
       "post_title" : ptitle,
       "post_text" : ptext,
       "creator_id" : authContext.id_state,
-      "files" : [],
+      "files" : filesarray,
       "deadline" : deadline
     };
     console.log(body);
@@ -81,8 +84,27 @@ export default function Mypost(props){
     ).then((response) => {});
     document.getElementById("myposttitle").innerHTML = "Post Title Here";
     document.getElementById("myposttext").innerHTML = "Write a Post";
+    setfilesarray([]);
     setisAssignment(false)
     props.getPostList();
+  }
+
+  async function uploadfilechange(event) {
+    console.log(event.target.files[0]);
+    setfile(event.target.files[0]);
+  }
+
+  async function uploadfile() {
+    const data = new FormData();
+    data.append("file", file);
+    const res = await axios.post("http://localhost:8080/v1/upload", data, {
+      // receive two    parameter endpoint url ,form data
+    });
+    setfilesarray((p) =>
+      p.concat({ "filename": res.data.filename, "fileurl": res.data.fileURL })
+    );
+    //assignmentfilearray.push(["Sample.txt","../Sample.txt"])
+    //console.log(assignmentfilearray.map(p => p.fileurl))
   }
 
   const outerdiv = "w-full shadow-xl hover:shadow-2xl" 
@@ -91,10 +113,11 @@ export default function Mypost(props){
   const postbody =
     "w-full text-black p-4 text-lg text-opacity-50 focus:text-opacity-100 focus:outline-none " +
     (props.showmypost ? "bg-gray-100" : "bg-gray-200");
-  const optdivcss = "w-full bg-gray-100 text-white p-4 text-lg flex flex-row justify-end"
+  const optdivcss = "w-full bg-gray-100 text-white p-1 text-lg flex flex-row justify-end"
   const buttoncss1 = "rounded-lg text-center w-4/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold"
   const inputcss1 = "rounded-lg text-center w-4/12 p-2 mx-2 text-black ng-gray-200 hover:opacity-75 font-semibold"
-  const buttoncss2 = "rounded-lg text-center w-2/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold"
+  const buttoncss2 =
+    "rounded-lg text-center w-2/12 p-2 mx-2 bg-blue-500 hover:opacity-75 font-semibold";
   const buttoncss3 =
     "rounded-lg text-center w-2/12 p-2 mx-2 bg-red-600 hover:opacity-75 font-semibold";
 
@@ -133,6 +156,15 @@ export default function Mypost(props){
           >
             Write a Post
           </div>
+          <div class="py-4 px-8"
+          style = {{
+            display : filesarray.length == 0 ? "none" : ""
+          }}
+          >
+            {filesarray.map((p) => (
+              <FilePanel key = {p.filename} filename={p.filename} fileurl={p.fileurl} />
+            ))}
+          </div>
           <div class={optdivcss}>
             <button
               class={buttoncss1}
@@ -151,11 +183,27 @@ export default function Mypost(props){
                 display: isAssignment ? "" : "none",
               }}
             ></input>
-            <button class={buttoncss2}>Attach File</button>
+          </div>
+          <div class={optdivcss}>
+            <input
+              class={buttoncss2 + " w-9/12"}
+              type="file"
+              id="fileurlmypost"
+              onChange={uploadfilechange}
+            ></input>
+            <button class={buttoncss2 + " w-3/12"} onClick={uploadfile}>
+              Upload File
+            </button>
+          </div>
+          <div class={optdivcss}>
             <button
               class={buttoncss3}
               onClick={
-                props.showmypost?(isAssignment ? handle_create_assignment : handle_create_post):(() => {})
+                props.showmypost
+                  ? isAssignment
+                    ? handle_create_assignment
+                    : handle_create_post
+                  : () => {}
               }
             >
               Post
