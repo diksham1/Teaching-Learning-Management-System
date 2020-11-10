@@ -114,7 +114,7 @@ export default function Post(props){
   }
   async function submit_assignment(){
       const d = new Date()
-      const n = d.toISOString()
+      const n = d.toISOString() 
       console.log(d)
       console.log(n)
       const res = await axios.post(ROUTES.api.post.courses + "/" + classContext.classCode_state + "/assignments/" + apiCallResult.assignment_id + "/submissions",{
