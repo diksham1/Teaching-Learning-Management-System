@@ -62,18 +62,24 @@ export default function Class(){
             <SideBar
               classname={classContext.className_state}
               isTeacher={authContext.isEducator_state}
-              setredirect = {setredirect}
-              setposts_array = {setposts_array}
-              setshowmypost = {setshowmypost}
+              setredirect={setredirect}
+              setposts_array={setposts_array}
+              setshowmypost={setshowmypost}
             />
           </div>
-          <div class="w-9/12 mx-2 flex flex-col space-y-4 p-2"
-          >
-            <Mypost
-              getPostList={getPostList}
-              isTeacher={authContext.isEducator_state}
-              showmypost = {showmypost}
-            />
+          <div class="w-9/12 mx-2 flex flex-col space-y-4 p-4">
+            <div
+              style = {{
+                display : showmypost ? "" : "none"
+              }}
+            >
+              <Mypost
+                getPostList={getPostList}
+                isTeacher={authContext.isEducator_state}
+                showmypost={showmypost}
+              />
+            </div>
+
             {posts_array == null
               ? ""
               : posts_array
