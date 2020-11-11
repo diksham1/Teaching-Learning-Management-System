@@ -197,13 +197,16 @@ export default function Mypost(props){
               onChange={uploadfilechange}
             ></input>
             <button
-              class={buttoncss2 + " w-3/12 focus:outline-none"}
+              class={buttoncss2 + " focus:font-bold w-3/12 focus:outline-none"}
               onClick={uploadfile}
             >
               Upload File
             </button>
             <button
-              class={buttoncss3 + " focus:outline-none focus:shadow-md"}
+              class={
+                buttoncss3 +
+                " focus:font-bold focus:outline-none focus:shadow-xl"
+              }
               onClick={
                 props.showmypost
                   ? isAssignment

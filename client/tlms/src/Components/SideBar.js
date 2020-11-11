@@ -12,6 +12,7 @@ export default function SideBar(props){
 
     async function handle_click_class_home(){
       props.setshowmypost(true)
+      props.setviewstudentlist(false);
       const res = await axios.get(
         ROUTES.api.get.courses +
           "/" +
@@ -23,12 +24,14 @@ export default function SideBar(props){
     }
     async function handle_click_my_post() {
       props.setshowmypost(false)
+      props.setviewstudentlist(false);
       const res = await axios.get(ROUTES.api.get.courses + "/" + classContext.classCode_state + "/students/" + authContext.id_state + "/posts" )
       props.setposts_array(res.data)
       setisCurrentlyActive(2);
     }
     async function handle_click_assignments() {
       props.setshowmypost(false);
+      props.setviewstudentlist(false);
       const res = await axios.get(
         ROUTES.api.get.courses +
           "/" +
@@ -48,6 +51,7 @@ export default function SideBar(props){
       setisCurrentlyActive(6)
     }
     async function handle_click_my_students(){
+      props.setviewstudentlist(true)
       setisCurrentlyActive(7)
     }
     async function handle_click_leaveexit_class() {
@@ -56,6 +60,7 @@ export default function SideBar(props){
       setisCurrentlyActive(8)
     }
     async function handle_delete_class(){
+        props.setredirect(true);
         setisCurrentlyActive(8);
     }
 
