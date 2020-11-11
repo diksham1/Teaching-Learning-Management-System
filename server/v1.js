@@ -359,7 +359,7 @@ router.post('/courses/:courseid/assignments', async function (req, res) {
  
 	let assignmentPost = {};
   	assignmentPost["creator_id"] = req.body.creator_id;
-  	assignmentPost["post_title"] = "Assignment";
+  	assignmentPost["post_title"] = req.body.post_title;
   	assignmentPost["post_text"] = req.body.post_text;
   	assignmentPost["files"] = req.body.files;
   	assignmentPost["assignment_id"] = insertId;
