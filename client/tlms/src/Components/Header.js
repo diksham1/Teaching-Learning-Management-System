@@ -134,7 +134,13 @@ export default function Headers(props) {
           >
             Create Class
           </button>
-          <button class={buttoncss} onClick={() => {}}>
+          <button
+            class={
+              buttoncss +
+              "  border-opacity-50 cursor-default shadow-none hover:shadow-none focus:shadow-none "
+            }
+            onClick={() => {}}
+          >
             Hello {props.name}
           </button>
           <button class={logoutButton} onClick={() => {}}>
