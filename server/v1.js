@@ -589,6 +589,45 @@ router.get('/courses/:courseid/posts/:postid', async function(req, res) {
  *	Delete a particular post given the post ID
  */
 
+ router.delete('/courses/:courseid', async function(req, res){
+	
+	try{
+		db.collection('User').updateMany(
+		{},
+		{
+			"$pull" : {"courses" : req.params.courseid}
+		}
+		)
+     const posts = await db
+       .collection("Course")
+       .find({
+         invite_code: req.params.courseid,
+       })
+       .project({
+         _id: 1,
+         posts: 1,
+       })
+       .limit(1)
+       .toArray();
+
+	 const next = posts[0]["posts"].map(p => ObjectID(p));
+
+	await db.collection("Post").deleteMany({
+    	"_id" : {"$in" : next},
+	});
+	
+	await db.collection("Course").deleteOne({
+    	"invite_code" : req.params.courseid
+	});
+
+	return res.json({});
+
+	}catch(e){
+		console.log(e)
+		return res.json(errorOccuredResponse)
+	}
+ })
+
 router.delete('/courses/:courseid/posts/:postid', async function(req, res) {
 	const postId = req.params.postid;
 	await db.collection('Post').deleteOne({
