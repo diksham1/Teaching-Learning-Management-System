@@ -154,7 +154,7 @@ export default function Post(props){
     "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg hover:opacity-75 text-lg button";
   const css11 =
     "p-2 bg-blue-500 text-white w-11/12 m-2 rounded-lg text-lg button";
-  const css12 = "py-4 px-8"
+  const css12 = "pb-4 px-8"
   const cssbored1 = "flex flex-row";
   const cssbored2 =
     "w-9/12 p-3 bg-gray-200 focus:bg-gray-300 text-black text-lg rounded-lg";
@@ -229,6 +229,7 @@ export default function Post(props){
               key={p.filename}
               filename={p.filename}
               fileurl={p.fileurl}
+              isAssignmentFile = "true"
             />
           ))}
         </div>
