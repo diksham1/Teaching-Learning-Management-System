@@ -113,7 +113,7 @@ export default function Mypost(props){
   const postbody =
     "w-full text-black p-4 text-lg text-opacity-50 focus:text-opacity-100 focus:outline-none " +
     (props.showmypost ? "bg-gray-100" : "bg-gray-200");
-  const optdivcss = "w-full bg-gray-100 text-white p-1 text-lg flex flex-row justify-end"
+  const optdivcss = "w-full bg-gray-100 text-white p-2 text-lg flex flex-row justify-end"
   const buttoncss1 = "rounded-lg text-center w-4/12 p-2 mx-2 bg-green-600 hover:opacity-75 font-semibold"
   const inputcss1 = "rounded-lg text-center w-4/12 p-2 mx-2 text-black ng-gray-200 hover:opacity-75 font-semibold"
   const buttoncss2 =
@@ -156,18 +156,23 @@ export default function Mypost(props){
           >
             Write a Post
           </div>
-          <div class="py-4 px-8"
-          style = {{
-            display : filesarray.length == 0 ? "none" : ""
-          }}
+          <div
+            class="py-4 px-8 bg-gray-100"
+            style={{
+              display: filesarray.length == 0 ? "none" : "",
+            }}
           >
             {filesarray.map((p) => (
-              <FilePanel key = {p.filename} filename={p.filename} fileurl={p.fileurl} />
+              <FilePanel
+                key={p.filename}
+                filename={p.filename}
+                fileurl={p.fileurl}
+              />
             ))}
           </div>
           <div class={optdivcss}>
             <button
-              class={buttoncss1}
+              class={buttoncss1 + " focus:outline-none"}
               style={{
                 display: props.isTeacher ? "" : "none",
               }}
@@ -186,18 +191,19 @@ export default function Mypost(props){
           </div>
           <div class={optdivcss}>
             <input
-              class={buttoncss2 + " w-9/12"}
+              class={buttoncss2 + " w-7/12 focus:outline-none"}
               type="file"
               id="fileurlmypost"
               onChange={uploadfilechange}
             ></input>
-            <button class={buttoncss2 + " w-3/12"} onClick={uploadfile}>
+            <button
+              class={buttoncss2 + " w-3/12 focus:outline-none"}
+              onClick={uploadfile}
+            >
               Upload File
             </button>
-          </div>
-          <div class={optdivcss}>
             <button
-              class={buttoncss3}
+              class={buttoncss3 + " focus:outline-none focus:shadow-md"}
               onClick={
                 props.showmypost
                   ? isAssignment

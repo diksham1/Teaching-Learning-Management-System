@@ -59,11 +59,14 @@ export default function Headers(props) {
         onClick={handle_class_join_overlay}
       >
         <div class={joinoverlay}>
-          <JoinClassOverlay f={setshowJoinClassOverlay} getClassesList = {props.getClassesList}/>
+          <JoinClassOverlay
+            f={setshowJoinClassOverlay}
+            getClassesList={props.getClassesList}
+          />
         </div>
       </div>
       <div class={paneldiv}>
-        <Link class={logolink} to="/">
+        <Link class={logolink} to="/dashboard">
           <Logo />
         </Link>
         <div class={applicationtitle}>
@@ -78,7 +81,10 @@ export default function Headers(props) {
           Join Class
         </button>
 
-        <button class={buttoncss} onClick={() => {}}>
+        <button
+          class={buttoncss + " border-opacity-50 cursor-default shadow-none hover:shadow-none focus:shadow-none "}
+          onClick={() => {}}
+        >
           Hello {props.name}
         </button>
         <button class={logoutButton} onClick={() => {}}>
@@ -114,7 +120,7 @@ export default function Headers(props) {
           </div>
         </div>
         <div class={paneldiv}>
-          <Link class={logolink} to="/">
+          <Link class={logolink} to="/dashboard">
             <Logo />
           </Link>
           <div class={applicationtitle}>

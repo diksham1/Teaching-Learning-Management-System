@@ -44,19 +44,21 @@ export default function Class() {
   return (
     <div>
       <div style={{ display: "none" }}>{classContext.classCode_state}</div>
-      <Header
-        name={
-          authContext.name_state.indexOf(" ") === -1
-            ? authContext.name_state
-            : authContext.name_state.substring(
-                0,
-                authContext.name_state.indexOf(" ")
-              )
-        }
-        isStudent={!authContext.isEducator_state}
-      />
+      <div class = "mb-4 mx-2">
+        <Header
+          name={
+            authContext.name_state.indexOf(" ") === -1
+              ? authContext.name_state
+              : authContext.name_state.substring(
+                  0,
+                  authContext.name_state.indexOf(" ")
+                )
+          }
+          isStudent={!authContext.isEducator_state}
+        />
+      </div>
       <div class="flex flex-row">
-        <div class="mx-2 w-3/12">
+        <div class="mx-4 px-4 w-3/12">
           <SideBar
             classname={classContext.className_state}
             isTeacher={authContext.isEducator_state}
@@ -65,7 +67,7 @@ export default function Class() {
             setshowmypost={setshowmypost}
           />
         </div>
-        <div class="w-9/12 mx-2 flex flex-col space-y-8 py-2 px-8">
+        <div class="w-9/12 mr-8 flex flex-col space-y-8 py-2 px-8">
           <div
             style={{
               display: showmypost ? "" : "none",

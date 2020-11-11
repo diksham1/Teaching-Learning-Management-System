@@ -66,7 +66,7 @@ export default function SideBar(props){
 
     //CSS 
     const buttonStyle =
-      "border-b-2 hover:border-opacity-50 hover:text-blue-500 text-lg focus:text-blue-400 border-black content-center w-9/12 p-2 focus:outline-none";
+      "border-b-2 hover:border-opacity-50 tracking-wide hover:text-blue-500 text-lg focus:text-blue-400 border-black content-center w-9/12 p-2 focus:outline-none";
     const outerButtonDiv = 
       "w-full flex flex-col outline-none items-center h-1/12 m-2"
     const sidebarTitleDiv = 
@@ -74,7 +74,9 @@ export default function SideBar(props){
     const outermostDiv = 
       "flex flex-col items-center bg-gray-200 h-screen w-full border-solid my-2 border-2 border-opacity-50 border-gray-700"
     const optionContainerDiv = 
-      "w-full flex flex-col outline-none bg-gray-500 items-center h-1/12 mb-2"
+      "w-full flex flex-col outline-none bg-gray-500 items-center font-semibold h-1/12"
+    const optionContainerDiv2 =
+      "w-full flex flex-col outline-none bg-gray-500 items-center h-1/12 mb-2";
     //___________________________________________________________________________
 
     
@@ -82,6 +84,9 @@ export default function SideBar(props){
       <div class={outermostDiv}>
         <div class={optionContainerDiv}>
           <div class={sidebarTitleDiv}>{props.classname}</div>
+        </div>
+        <div class={optionContainerDiv2}>
+          <div class={sidebarTitleDiv}>Invite Code : {classContext.classCode_state}</div>
         </div>
         <div class={outerButtonDiv}>
           <button

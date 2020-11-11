@@ -120,6 +120,7 @@ export default function Post(props){
       const res = await axios.post(ROUTES.api.post.courses + "/" + classContext.classCode_state + "/assignments/" + apiCallResult.assignment_id + "/submissions",{
         student_id : authContext.id_state,
         student_name : authContext.name_state,
+        student_email : authContext.email_state,
         submissions : assignmentfilearray,
         timestamp : n
       })
@@ -229,7 +230,7 @@ export default function Post(props){
               key={p.filename}
               filename={p.filename}
               fileurl={p.fileurl}
-              isAssignmentFile = "true"
+              isAssignmentFile="true"
             />
           ))}
         </div>
@@ -255,7 +256,7 @@ export default function Post(props){
             }}
             onClick={uploadfile}
           >
-            Upload Assignment"
+            Upload Assignment
           </button>
           <button
             class={css10}
@@ -291,7 +292,7 @@ export default function Post(props){
           display: viewSubmissions ? "" : "none",
         }}
       >
-        <div class = "p-2">
+        <div class="p-2">
           {apiCallResult2 !== null && apiCallResult2.submissions.length !== 0
             ? ""
             : "No Submission yet"}
@@ -302,6 +303,7 @@ export default function Post(props){
                   name={p.student_name}
                   files={p.submissions}
                   timestamp={p.timestamp}
+                  email = {p.student_email}
                 />
               ))}
         </div>
@@ -348,7 +350,7 @@ export default function Post(props){
       </div>
       <div class={cssbored4}>
         <button
-          class={cssbored5}
+          class={cssbored5 + " focus:outline-none"}
           style={{
             display: showComments
               ? authContext.isEducator_state
