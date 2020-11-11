@@ -60,6 +60,7 @@ export default function SideBar(props){
       setisCurrentlyActive(8)
     }
     async function handle_delete_class(){
+        await axios.delete(ROUTES.api.get.courses + "/" + classContext.classCode_state)
         props.setredirect(true);
         setisCurrentlyActive(8);
     }
