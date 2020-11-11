@@ -282,7 +282,7 @@ export default function Post(props){
       </div>
       <div
         class={
-          "w-full overflow-scroll p-4 bg-gray-400 " +
+          "w-full overflow-scroll p-4 bg-gray-200 " +
           (apiCallResult2 !== null && apiCallResult2.submissions.length !== 0
             ? "h-48"
             : "")
