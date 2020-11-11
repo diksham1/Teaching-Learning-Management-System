@@ -86,8 +86,8 @@ export default function Class() {
             display: viewstudentlist ? "" : "none",
           }}
         >
-          <div class = "text-5xl border-b-2 border-solid border-gray-700 w-full flex flex-row justify-center items-end">
-            Your {(authContext.isEducator_state)? "Students" : "Classmates"}
+          <div class="text-5xl border-b-2 border-solid border-gray-700 w-full flex flex-row justify-center items-end">
+            Your {authContext.isEducator_state ? "Students" : "Classmates"}
           </div>
           {studentarray.map((p) => (
             <StudentDetailTab
@@ -96,6 +96,7 @@ export default function Class() {
               name={p.name}
               email={p.email}
               isTeacher={authContext.isEducator_state}
+              getStudentsList={getStudentsList}
             />
           ))}
         </div>
