@@ -4,6 +4,7 @@ import {AuthContext} from "../Contexts/AuthContext"
 import {ClassContext} from "../Contexts/ClassContext.js"
 import ROUTES from '../routes'
 import FilePanel from './FilePanel'
+const linkifyhtml = require('linkifyjs/html')
 
 export default function Mypost(props){
 
@@ -107,6 +108,15 @@ export default function Mypost(props){
     //console.log(assignmentfilearray.map(p => p.fileurl))
   }
 
+  async function handle_linkify(){
+      const t = document.getElementById('myposttext').innerHTML
+      console.log(t)
+      console.log(linkifyhtml(t))
+      document.getElementById('myposttext').innerHTML = linkifyhtml(t,{ 
+        className : " hover:opacity-75 underline cursor-pointer"
+      })
+  }
+
   const outerdiv = "w-full shadow-xl hover:shadow-2xl" 
   const nameposter = "bg-gray-700 text-gray-200 p-4 cursor-pointer text-2xl"
   const posttitle = "w-full text-black p-4 text-lg text-opacity-50 border-b-2 border-gray-400 border-solid focus:text-opacity-100 focus:outline-none " + (props.showmypost?"bg-gray-100":"bg-gray-200")
@@ -153,6 +163,7 @@ export default function Mypost(props){
             contentEditable={props.showmypost ? "true" : "false"}
             onFocus={mypost_focus}
             onBlur={mypost_blur}
+            onBlur = {handle_linkify}
           >
             Write a Post
           </div>
