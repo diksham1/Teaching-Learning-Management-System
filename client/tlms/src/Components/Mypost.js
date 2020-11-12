@@ -24,6 +24,7 @@ export default function Mypost(props){
     if (document.getElementById("myposttext").innerHTML === "") {
       document.getElementById("myposttext").innerHTML = "Write a Post";
     }
+    handle_linkify();
   }
   async function mypost_title_focus() {
     if (
@@ -163,7 +164,6 @@ export default function Mypost(props){
             contentEditable={props.showmypost ? "true" : "false"}
             onFocus={mypost_focus}
             onBlur={mypost_blur}
-            onBlur = {handle_linkify}
           >
             Write a Post
           </div>
